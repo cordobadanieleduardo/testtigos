@@ -1,0 +1,903 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{% static 'source/libraries/bootstrap/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'source/libraries/DataTables/css/jquery.dataTables.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'source/style/all.css' %}">
+
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<title>Testigos verdes</title>
+</head>
+<body>
+	
+	<style type="text/css">
+		body {
+			background: #0068385;
+		}
+
+		.logo {
+			background: #006838;
+			/*background: #D7DF23;*/
+			z-index: 999;
+			position: fixed;
+			left: 0;
+			right: 0;
+			width: 100%;
+			display: flex;
+			padding: 0px 15px;
+			justify-content: center;
+			border-bottom: 1px solid #252;
+		}
+
+		.logo img {
+			width: 180px;
+		}
+
+		.testigos {
+			background: #000;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}
+
+		.t_testigos, .t_escrutinio {
+			border-top: 1px solid #888;
+			position: fixed;
+			color: #fff;
+			padding-top: 20px;
+			padding-bottom: 100px;
+			text-align: center;
+			top: 90px;
+			bottom: 0;
+			overflow-y: auto;
+		}
+
+		.t_escrutinio {
+			/*background: #D7DF23;*/
+			/*background: #0D9A49;*/
+			background: #fff;
+			color: #000;
+			right: 0;
+		}
+
+		.t_testigos {
+			/*background: #006838;*/
+			background: #ddd;
+			color: #000;
+			left: 0;
+		}
+
+		.tp-testigos {
+			width: 80%;
+			margin: 10%;
+			text-align: justify;
+		}
+		.home, .home_electorales {
+			display: none;
+		}
+
+		td {
+			padding: 0
+		}
+		td input {
+			margin: 0;
+			width: 100%;
+		}
+
+		.tit_dep {
+			color: #0D9A49;
+		}
+
+		footer {
+			position: fixed;
+			width: 100%;
+			bottom: 0;
+			background: #008137;
+			padding: 5px;
+		}
+		footer div {
+			justify-content: space-between; 
+			color: #fff;
+		}
+
+		.user {
+			position: fixed;
+			z-index: 9999;
+			top: 10px;
+			color: #fff;
+			width: 98%;
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.logo_user {
+			display: flex;
+			justify-content: flex-start;
+			max-width: 230px;
+		}
+
+		.logo_user img {
+			width: 40px;
+			height: 40px;
+		}
+		.snpr {
+	        text-align: center;
+	        position: fixed;
+	        left: 0;
+	        top: 0;
+	        right: 0;
+	        bottom: 0;
+	        padding-top: 10px;
+	        background: #5555;
+	        width: 100%;
+	        z-index: 9999;
+	        display: none;
+	        color: #fff;
+	    }
+	    .snpr div {
+	    	margin-top: 25%;
+	    	width: 150px;
+	    	height: 150px;
+	    	font-size: 2em;
+	    }
+		/*@media(max-width: 650px) {
+			.t_escrutinio {
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 45%;
+				width: 100%;
+			}
+			.t_testigos {
+				position: absolute;
+				top: 55%;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				width: 100%;
+			}
+		}*/
+
+	</style>
+	<div class="snpr" id="snpr">
+		<div class="spinner-border" role="status">
+			<span class="visually-hidden">Loading...</span>
+		</div>
+	</div>
+
+	<section class="container-fluid testigos">
+		<div>
+			<div class="logo">
+				<!-- <h3>CARGUE DE TESTIGOS</h3> -->
+				<img src="{% static 'source/img/LOGO.png' %}">
+			</div>
+			<br><br><br>
+			<div class="user">
+				<div class="logo_user">
+					<img src="{% static 'source/img/user.png' %}">&nbsp;
+					<div>
+						<small>usuario</small>
+						<br>
+						<small><b id="user"> {{request.user.get_full_name | upper }} </b></small>
+					</div>
+				</div>
+				<div class="logo_user">
+					<img src="{% static 'source/img/can.png' %}">&nbsp;
+					<div>
+						<small>Candidato(a)</small>
+						<br>
+						<b id="candidato"> {{request.user.email | lower}}</b>
+						<button onclick="modal_cerrar_sesion()" type="button" class="dropdown-item" data-ds-toggle="modal" data-bs-target="#logoutModal">
+						  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+						   Cerrar sesión
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="t_escrutinio col-6" id="escrutinio">
+				<h4>TESTIGOS DE ESCRUTINIO</h4>
+				<div>
+					<div id="btn-escrutinio">
+						<div class="tp-testigos">
+							En esta sección usted podrá inscribir los <b>testigos de escrutinio</b>, estos testigos se registraran por zona, por favor verifique que los datos sean correctos, <b>recuerde que el número de cédula no debe tener ni puntos ni comas, al igual que el número de teléfono.</b> Al finalizar verifique que el correo y número de teléfono sean correctos ya que <b>Registraduría va a estar enviando las notificaciones</b> a través de estos canales de comunicación.
+							<br><br><br><br>
+						</div>
+						<button class="btn btn-success" onclick="init_escrutinio()">Agregar testigos de escrutinio</button>
+					</div>
+					<div class="home">
+						<br>
+						<div class="container-fluid">
+							<h3 class="tit_dep">{{departamento}} {{municipio}} {{comunidad}}</h3>
+							<br>
+							{{candidato}}
+							{{candidato.id_dept.name_dept}}
+							{{candidato.id_dept.id_d}}
+							{{candidato.id_dept.cod_dep}}
+							<br>
+							{{candidato.id_mun.name_mun}}
+							{{candidato.id_mun.id_m}}
+							<br>
+							{{candidato.id_com.name_com}}
+							{{candidato.id_com.id_c}}
+							<h5>LISTADO DE ZONAS DISPONIBLES PARA INSCRIBIR TESTIGOS DE ESCRUTINIO</h5>
+							<br>
+							<P>
+								<b>Desde el Partido Alianza Verde, les recomendamos que al elegir a sus Testigos de Escrutinio tengan en cuenta que las personas puedan tener conocimiento sobre el proceso de reclamaciones y solicitud de reconteo de votos por anomalías en el proceso.</b>
+								<br><br>
+								Por eso, revise la zonas de votación disponibles a continuación, recuerde que si no aparece es porque ya hay un testigo inscrito en esa mesa. <b>TENGA EN CUENTA que el número de cédula no debe tener puntos ni comas al igual que el número de teléfono.</b>
+								<br><br>
+								Teniendo esta claridad, diligencie los datos de los testigos de mesa, recuerde que usted podrá modificar la información cada vez que acceda con el mismo correo. <b>PERO, antes de dar clic en el botón azul verifique que los datos sean correctos, ya que después la mesa no estará habilitada.</b>
+							</P>
+							<!-- <form action=""> -->
+								<div class="row">
+									<div class="col">
+										<select class="form-control" name="coms" required id="coms">
+											<option value=0>Seleccionar zona</option>
+											{% for z in zonas %}
+												<option value="{{z.zz}}">{{z.comuna_localidad }} </option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<select class="form-control" name="puestos" required id="puestos">
+											<option value=0>Seleccionar puesto</option>
+											{% for d in puestos %}
+												<option value="{{d.id}}">{{d.name}}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+							
+								<input type="number" class="form-control" id="cc" name="cc" placeholder="Cédula">
+								<input type="text" class="form-control" id="p_name" name="p_name" placeholder="Primer nombre">
+								<input type="text" class="form-control" id="s_name" name="s_name" placeholder="Segundo nombre">
+								<input type="text" class="form-control" id="p_lastname" name="p_lastname" placeholder="Primer apellido">
+								<input type="text" class="form-control" id="s_lastname" name="s_lastname" placeholder="Segundo apellido">
+								<input type="number" class="form-control" id="phone" name="phone" placeholder="Celular o teléfono">
+								<input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico">
+								<button type="submit" onclick="modal_escrutinio()" class="btn btn-primary" >
+									<i class="fa-solid fa-floppy-disk"></i>
+								</button>
+							
+							<!-- </form> -->
+
+
+							<br>
+							<table class="table tb_testigos" id="tb_testigos_esc">
+								<thead style="background: #0D9A49; color: #fff;">
+									<th>Municipio</th>
+									<th>Zona</th>
+									<th>Cédula</th>
+									<th>Primer nombre</th>
+									<th>Segundo nombre</th>
+									<th>Primer apellido</th>
+									<th>Segundo apellido</th>
+									<th>Teléfono</th>
+									<th>Email</th>
+									<th></th>
+								</thead>
+								<tbody>
+									<tr>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td><button class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button></td>
+									</tr>
+								</tbody>
+							</table>	
+						</div>
+						
+						<br>
+						<div>
+							<button class="btn btn-success home" onclick="home()"><i class="fa-solid fa-house"></i> Inicio</button>
+							<button class="btn btn-primary" onclick="returnLogin()">
+								<i class="fa-solid fa-user" ></i> Volver al login
+							</button>
+ 						</div>
+ 						<br><br><br><br>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="t_testigos col-6" id="testigos">
+				<h4 id="init_title">TESTIGOS DE MESA</h4>
+				<div>
+					<div id="btn-testigos">
+						<div class="tp-testigos">
+							En esta sección usted podrá inscribir los testigos de mesa o testigos remanentes. 
+							<br><br>
+							En caso de querer agregar <b>testigos de mesa</b> haga clic en el botón "Agregar testigos de mesa" y le aparecerá el listado de puestos disponibles. En cada puesto podrá diligenciar la información del testigo, al finalizar haga clic en el botón azul de "guardar". 
+							<br><br>
+							Por otro lado, en caso de agregar <b>testigos remanentes</b>, deberá realizar el mismo proceso. Haga clic en el botón "Agregar testigos remanentes" y podrá diligenciar la información del testigo en el puesto de votación correspondiente. 
+							<br><br>
+							<b>POR FAVOR</b>, verifique que los datos estén correctamente diligenciados, <b>recuerde que el número de cédula no debe tener ni puntos ni comas al igual que el número de teléfono.</b> Al finalizar verifique que el correo y número de teléfono sean correctos ya que <b>Registraduría va a estar enviando las notificaciones</b> a través de estos canales de comunicación.
+						</div>
+						<div class="d-flex justify-content-center">
+							<button class="btn btn-success m-2"  onclick="init_testigos('predeterminado')">Agregar testigos de mesa</button>
+							<button class="btn btn-success m-2"  onclick="init_testigos('ramanentes')">Agregar testigos remanentes</button>
+						</div>
+					</div>
+					<div class="container-fluid home_electorales">
+						<br>
+						<h3 class="tit_dep">{{departamento}} {{municipio}} {{candidato.id_com.name_com}}</h3>
+						<br>
+
+						<h5>LISTADO DE ZONAS DISPONIBLES PARA INSCRIBIR TESTIGOS DE MESA</h5>
+						<br>
+						<P>
+							Revise las mesas de votación que están disponibles a continuación, recuerde que si no aparece es porque ya hay un testigo inscrito en esa mesa. <b>TENGA EN CUENTA que el número de cédula no debe tener puntos ni comas al igual que el número de teléfono. </b>
+							<br><br>
+							Teniendo esta claridad, diligencie los datos de los testigos de mesa, recuerde que usted podrá modificar la información cada vez que acceda con el mismo correo. <b>PERO, antes de dar clic en el botón azul verifique que los datos sean correctos, ya que después la mesa no estará <i>habilitada.</i></b>
+						</P>
+						<div>
+							{% if municipio != 'BOGOTA. D.C.' and municipio != 'BARRANQUILLA' and municipio != 'CARTAGENA' and municipio != 'SANTA MARTA' and municipio != 'BUENAVENTURA'   %}
+								<div class="row">
+									<div class="col">
+										<select class="form-control" name="zonas_testigo_mesa" required id="zonas_testigo_mesa">
+											<option value=0>Seleccionar zona</option>
+											{% for z in zonas %}
+												<option value="{{z.zz}}">{{z.zz }} </option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>								
+							{% endif %}
+								<div class="row">
+									<div class="col">
+										<select class="form-control" name="puestos_testigos_mesa" required id="puestos_testigos_mesa">
+											<option value=0>Seleccionar puesto</option>
+											{% for p in puestos %}
+												<option value="{{p.id}}">{{p.nombre_puesto}}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+								
+
+
+								<div class="row">
+									<div class="col">
+										<select class="form-select" name="mesa_testigos_mesa" required id="mesa_testigos_mesa" multiple="" tabindex="-1" aria-hidden="true">
+											{% for m in mesas %}
+												<option value="{{m.id}}">{{m.nombre_mesa}}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+								
+								<input type="number" class="form-control" id="cc_testigo_mesa" name="cc_testigo_mesa" placeholder="Cédula" required>
+								<input type="text" class="form-control" id="p_name_testigo_mesa" name="p_name_testigo_mesa" placeholder="Primer nombre">
+								<input type="text" class="form-control" id="s_name_testigo_mesa" name="s_name_testigo_mesa" placeholder="Segundo nombre">
+								<input type="text" class="form-control" id="p_lastname_testigo_mesa" name="p_lastname_testigo_mesa" placeholder="Primer apellido">
+								<input type="text" class="form-control" id="s_lastname_testigo_mesa" name="s_lastname_testigo_mesa" placeholder="Segundo apellido">
+								<input type="number" class="form-control" id="phone_testigo_mesa" name="phone_testigo_mesa" placeholder="Celular o teléfono">
+								<input type="email" class="form-control" id="email_testigo_mesa" name="email_testigo_mesa" placeholder="Correo electrónico">
+								<button type="submit" onclick="modal_testigo_mesa()" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i>
+								</button>
+							
+
+
+							<br>
+							<table class="table tb_testigos" id="tb_testigos_pre">
+								<thead style="background: #0D9A49;; color: #fff">
+									<th>Municipio</th>
+									<th>Puesto</th>
+									<th>Mesa</th>
+									<th>Cédula</th>
+									<th>Primer nombre</th>
+									<th>Segundo nombre</th>
+									<th>Primer apellido</th>
+									<th>Segundo apellido</th>
+									<th>Teléfono</th>
+									<th>Email</th>
+									<th></th>
+								</thead>
+								<tbody>
+									<tr>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td>...</td>
+										<td><button class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button></td>
+									</tr>
+								</tbody>
+							</table>	
+						</div>
+						<br>
+ 						<div>
+							<button class="btn btn-success home_electorales" onclick="home()"><i class="fa-solid fa-house"></i> Inicio</button>
+							<button class="btn btn-primary" onclick="returnLogin()">
+								<i class="fa-solid fa-user"></i> Volver al login
+							</button>
+							
+ 						</div>
+ 						<br><br><br><br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="modal fade" id="modal-errors" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="modal-title">Modal title</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body" id="modal-body">
+	        
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+	        <button type="button" onclick="modal_aceptar()" class="btn btn-primary">Aceptar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="modal fade" id="modal-errors1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="modal-title1">Modal title</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body" id="modal-body1">
+	        
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">¿Cerrar sesión para <mark> {{ user.username}} </mark>?
+					</h5>
+					<!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button> -->
+				</div>
+				<div class="modal-body">Al dar click en el botón salir, cerrará la sesión para <mark> {{ user.username}}
+					</mark> </div>
+				<div class="modal-footer">
+					<form method="post" action="{% url 'testigos:logout' %}">
+						{% csrf_token %}
+						<button onclick="modal_cancelar()" class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-success">Salir</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+  <!-- <div class="modal fade" id="popup"></div> -->
+
+
+	<footer>
+		<div class="d-flex">
+			<b>Alianza Verde</b>
+			<b>Soporte técnico: 315 773 0175</b> 
+		</div>
+	</footer>
+
+	<script type="text/javascript" src="{% static 'source/libraries/jquery.js' %}"></script>
+	<script type="text/javascript" src="{% static 'source/libraries/bootstrap/js/bootstrap.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'source/libraries/popper.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'source/libraries/DataTables/js/jquery.dataTables.min.js' %}"></script>
+	<script type="text/javascript">
+		var escrutinio = $("#escrutinio");
+		var testigos = $("#testigos");
+		var type_testigos = "";
+		var departamento = "";
+		var data_user = "";
+		var municipio = [];
+		var puesto = [];
+		var mesa = [];
+		var zona = [];
+
+		var modal_id;
+		var modal_type;
+		var muns_select = $(".muns_select");
+		var muns_escrutinio = $("#muns_escrutinio");
+		var muns_predeterminado = $("#muns_predeterminado");
+		var muns_remanentes = $("#muns_remanentes");
+		var post = $("#post");
+		
+		function home() {
+			location.reload()
+			$(".home").hide()
+		}
+
+		function returnLogin () {
+			console.log('***********************');
+			location.href='/';
+		}
+
+		function init_escrutinio() {
+			$("#snpr").show();
+			type_testigos="escrutinio";
+
+			let table = new DataTable('#tb_escrutinio');
+			escrutinio.animate({
+				width: "100%",
+				right:"0",
+				left:"0",
+				top:"90px",
+				bottom:"10px",
+				height:"100%"
+			}, 1000);
+			
+			testigos.animate({
+				width: "0%",
+				right:"0",
+				left:"0",
+				top:"90px",
+				bottom:"10px",
+				height:"100%"
+			});
+			$(".home").show()
+			$("#btn-escrutinio").hide();
+			getWitnesses();
+			returnLoginSesion();
+		}
+		
+		function init_testigos(type_t) {
+			$("#snpr").show();
+			if (type_t=="predeterminado") {
+				$("#init_title").text("TESTIGOS DE MESA");
+			} else {
+				$("#init_title").text("TESTIGOS REMANENTES");
+			}
+
+			type_testigos=type_t;
+
+			escrutinio.animate({
+				width: "0%",
+				right:"0",
+				left:"0",
+				top:"90px",
+				bottom:"10px",
+				height:"100%"
+			}, 1000);
+			
+			testigos.animate({
+				width: "100%",
+				right:"0",
+				left:"0",
+				top:"90px",
+				bottom:"10px",
+				height:"100%"
+			});
+			$(".home_electorales").show();
+			$("#btn-testigos").hide();
+
+			getWitnesses();
+			returnLoginSesion();
+			
+		}
+
+		function getWitnesses() {
+			$.get("/data/?type_testigos=" + type_testigos, function (e) {
+				setDataTableTestigos(e);
+			});
+		}
+
+		post.on("change", function (e) {
+			$.get("../controller/GetPostController.php?post=" + post.val() + "&type_testigos=" + type_testigos, function (e) {
+				var data = JSON.parse(e);
+				// puesto = data.name_post;
+				// mesa = data.name_table;
+				setDataTableTestigos (data);
+				returnLoginSesion();
+			});
+		});
+
+		function setDataTableTestigos (data) {
+			var table_tr = "";
+
+			$(".tb_testigos tbody tr").remove();
+
+			for (i=0; i<data.length; i++) {
+
+				id=data[i].id_t;
+				municipio[id]=data[i].name_mun;
+				puesto[id]=data[i].name_post;
+				mesa[id]=data[i].name_table;
+				zona[id]=data[i].name_table;
+				cc=data[i].cc;
+				p_name=data[i].p_name;
+				s_name=data[i].s_name;
+				p_last_name=data[i].p_last_name;
+				s_last_name=data[i].s_last_name;
+				email=data[i].email;
+				phone=data[i].phone;
+
+				if (cc==null) {cc="";}
+				if (s_name==null) {s_name="";}
+				if (s_last_name==null) {s_last_name="";}
+
+				p_name=p_name.toUpperCase()
+				s_name=s_name.toUpperCase()
+				p_last_name=p_last_name.toUpperCase()
+				s_last_name=s_last_name.toUpperCase()
+
+                if (data[i].status_error == 1) {
+                    table_tr += "<tr id='field-"+id+"' style='background:#faa;'  title='"+data[i].desc_error+"' >";
+                } else {
+                    table_tr += "<tr id='field-"+id+"'>";    
+                }
+				
+				if (type_testigos!="escrutinio"){
+					table_tr += '<td>'+data[i].name_mun+'</td>'+
+						'<td>'+data[i].name_post+'</td>'+
+						'<td>'+data[i].name_table+'</td>';
+				} else {
+					table_tr += '<td>'+data[i].name_mun+'</td>';
+					table_tr += '<td>'+zona[id]+'</td>';
+				}
+
+				table_tr += '<td><input type="number" class="form-control" onchange="save_testigo('+id+', 0)" id="cc'+id+'" value="'+cc+'" name="cc"></td>'+
+					'<td><input type="text" class="form-control" onchange="save_testigo('+id+', 0)" id="p_name'+id+'" value="'+p_name+'" name="p_name"></td>'+
+					'<td><input type="text" class="form-control" onchange="save_testigo('+id+', 0)" id="s_name'+id+'" value="'+s_name+'" name="s_name"></td>'+
+					'<td><input type="text" class="form-control" onchange="save_testigo('+id+', 0)" id="p_lastname'+id+'" value="'+p_last_name+'" name="p_lastname"></td>'+
+					'<td><input type="text" class="form-control" onchange="save_testigo('+id+', 0)" id="s_lastname'+id+'" value="'+s_last_name+'" name="s_lastname"></td>'+
+					'<td><input type="number" class="form-control" onchange="save_testigo('+id+', 0)" id="phone'+id+'" value="'+phone+'" name="phone"></td>'+
+					'<td><input type="email" class="form-control" onchange="save_testigo('+id+', 0)" id="email'+id+'" value="'+email+'" name="email"></td>'+
+					'<td><button type="submit" onclick="modal_testigo('+id+', 1)" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button></td>'+
+				"</tr>";
+			}
+			if (type_testigos=="escrutinio") {
+				$("#tb_testigos_esc tbody").html(table_tr);
+				let table = new DataTable('#tb_testigos_esc');
+			} else {
+				$("#tb_testigos_pre tbody").html(table_tr);
+				let table = new DataTable('#tb_testigos_pre');
+			}
+
+			$("#snpr").hide();
+			//returnLoginSesion();
+		}	
+
+		function modal_cerrar_sesion() {
+			modal = $("#logoutModal");
+			modal.modal("show");
+		}
+		
+		function modal_escrutinio() {			
+			
+			nombres = $("#p_name").val() + " " + $("#s_name").val();
+			apellidos = $("#p_lastname").val() + " " + $("#s_lastname").val();
+			resumen = "<b style='color: #f00; text-aling: center;'>¿Está seguro que desea guardar los cambios de forma definitiva?</b><br><br> RECUERDE que una vez de clic en aceptar no se podrá modificar la información de este testigo:<br><br>"+
+				"<ul>"+
+					"<li>Departamento <i class='fa-solid fa-right-long'></i> "+'{{candidato.id_dept.name_dept}}'+"</li>"+
+					"<li>Municipio <i class='fa-solid fa-right-long'></i> "+'{{candidato.id_mun.name_mun}}'+"</li>";
+		//	if (type_testigos != "escrutinio") {
+		//		resumen += "<li>Puesto <i class='fa-solid fa-right-long'></i> "+puesto[id]+"</li>";
+		//		resumen += "<li>Mesa <i class='fa-solid fa-right-long'></i> "+mesa[id]+"</li>";				
+		//	} else {
+		//		resumen += "<li>Zona <i class='fa-solid fa-right-long'></i> "+zona[id]+"</li>";
+		//	}
+			resumen += "<li>Cédula <i class='fa-solid fa-right-long'></i> "+$("#cc").val()+"</li>"+
+					"<li>Nombres <i class='fa-solid fa-right-long'></i> "+nombres+"</li>"+
+					"<li>Apellidos <i class='fa-solid fa-right-long'></i> "+apellidos+"</li>"+
+					"<li>Teléfono <i class='fa-solid fa-right-long'></i> "+$("#phone").val()+"</li>"+
+					"<li>Email <i class='fa-solid fa-right-long'></i> "+$("#email").val()+"</li>"+
+				"</ul>";
+
+			//if (type==1) {
+				$("#modal-title").text("Finalizar registro");
+				$("#modal-body").html(resumen);
+			//}
+			modal = $("#modal-errors");
+			modal.modal("show");
+			//modal_id=id;
+			modal_type=1;
+			//returnLoginSesion();
+		}
+
+		function modal_testigo_mesa() {			
+		
+			nombres = $("#p_name_testigo_mesa").val() + " " + $("#s_name_testigo_mesa").val();
+			apellidos = $("#p_lastname_testigo_mesa").val() + " " + $("#s_lastname_testigo_mesa").val();
+			puesto = $("#puestos_testigos_mesa option:selected").text();
+			mesa=$("#mesa_testigos_mesa").val();
+			zona=$("#zona_testigos_mesa").val();
+
+			resumen = "<b style='color: #f00; text-aling: center;'>¿Está seguro que desea guardar los cambios de forma definitiva?</b><br><br> RECUERDE que una vez de clic en aceptar no se podrá modificar la información de este testigo:<br><br>"+
+				"<ul>"+
+					"<li>Departamento <i class='fa-solid fa-right-long'></i> "+'{{departamento}}'+"</li>"+
+					"<li>Municipio <i class='fa-solid fa-right-long'></i> "+'{{municipio}}'+"</li>";
+			if (type_testigos != "escrutinio") {
+				resumen += "<li>Puesto <i class='fa-solid fa-right-long'></i> "+puesto+"</li>";
+				resumen += "<li>Mesa <i class='fa-solid fa-right-long'></i> "+mesa+"</li>";				
+			} else {
+				resumen += "<li>Zona <i class='fa-solid fa-right-long'></i> "+zona+"</li>";
+			}
+			resumen += "<li>Cédula <i class='fa-solid fa-right-long'></i> "+$("#cc_testigo_mesa").val()+"</li>"+
+					"<li>Nombres <i class='fa-solid fa-right-long'></i> "+nombres+"</li>"+
+					"<li>Apellidos <i class='fa-solid fa-right-long'></i> "+apellidos+"</li>"+
+					"<li>Teléfono <i class='fa-solid fa-right-long'></i> "+$("#phone_testigo_mesa").val()+"</li>"+
+					"<li>Correo <i class='fa-solid fa-right-long'></i> "+$("#email_testigo_mesa").val()+"</li>"+
+				"</ul>";
+
+			//if (type==1) {
+				$("#modal-title").text("Finalizar registro");
+				$("#modal-body").html(resumen);
+			//}
+
+			modal = $("#modal-errors");
+			modal.modal("show");
+			//modal_id=id;
+			modal_type=1;
+			//returnLoginSesion();
+		}
+
+		function modal_cancelar() {
+			modal = $("#logoutModal");
+			modal.modal("hide");
+		}
+
+		function modal_aceptar() {
+			if (type_testigos != 'escrutinio'){
+				save_testigo('_testigo_mesa', modal_type);
+			}else{
+				save_testigo('', modal_type);
+			}
+			modal = $("#modal-errors");
+			modal.modal("hide");
+		}
+
+		function save_testigo(id, type) {
+			cedula = $("#cc" + id).val();
+			cc=""
+			for (i=0; i<cedula.length; i++) {
+				if (cedula[i]=="." || cedula[i]==",") {
+				} else {
+					cc+=cedula[i];
+				}
+			}
+			p_name=$("#p_name" + id).val();
+			s_name=$("#s_name" + id).val();
+			p_lastname=$("#p_lastname" + id).val();
+			s_lastname=$("#s_lastname" + id).val();
+			phone=$("#phone" + id).val();
+			email=$("#email" + id).val();
+			let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+			puesto_nombre = $("#puestos_testigos_mesa option:selected").text();
+			mesas=$("#mesa_testigos_mesa").val();
+			zona=$("#zona_testigos_mesa").val();
+			puesto=$("#puestos_testigos_mesa").val();
+
+
+			data = "id="+ puesto_nombre +"&cc="+cc+"&type="+type_testigos+"&p_name="+p_name+"&s_name="+s_name+"&p_lastname="+p_lastname+"&s_lastname="+s_lastname+"&phone="+phone+"&email="+email+"&save="+type+"&mesas="+mesas+"&zona="+zona+"&puesto="+puesto+"&csrfmiddlewaretoken="+csrfToken;
+			
+			val_email = false;
+			for (i=0; i < email.length; i++) {
+				if (email[i]=="@") {
+					val_email=true;
+				}
+				if (email[i]==".") {
+					val_email=true;	
+				}
+			}
+
+			if (email=="") {
+				val_email=true;
+			}
+
+			if (val_email) {
+				$.post("/guardar-testigo/", data, function (e, eve) {
+					data = e; //JSON.parse(e);
+					data_tes = data.data;
+					err = data.error;
+					if (data.status == "ok") {
+						location.href = data.action;
+						$("#modal-body1").html("Testigo registrado");
+						modal = $("#modal-errors1");
+						modal.modal("show");	
+					}else if (err!="") {
+						$("#modal-body1").html(err);
+						modal = $("#modal-errors1");
+						modal.modal("show");					
+					} else {
+						if (type==1) {
+							$("#field-"+id).remove();
+						}
+					}
+				});	
+			} else {
+				$("#email" + id).val("");
+				modal = $("#modal-errors1");
+				modal.modal("show");
+				$("#modal-body1").html("El correo electrónico que ingresó no es válido, por favor, escríbalo nuevamente.");
+			}
+			//returnLoginSesion();			
+		}
+		
+		function returnLoginSesion () {
+			if (data_user=="") {
+//				// location.href='login/index.html';
+			}
+		}
+
+		$('#coms').change(function () {
+			c = $(this);
+			$.ajax({
+				url: '/cargar-puestos/',
+				data: {
+					'departamento': {{candidato.id_dept.cod_dep}},
+					'comuna': c.val()
+				},
+				success: function (data) {
+					$('#puestos').empty();
+					$('#puestos').append('<option value=0>Seleccionar puesto</option>');
+					$.each(data, function (key, value) {
+						$('#puestos').append('<option value="' + value.pp + '">' + value.nombre_puesto + '</option>');
+					});
+				}
+			});
+		});
+
+		$('#zonas_testigo_mesa').change(function () {
+			c = $(this);
+			$.ajax({
+				url: '/cargar-puestos/',
+				data: {
+					'zz': c.val()
+				},
+				success: function (data) {
+					$('#mesa_testigos_mesa').empty();
+					$('#puestos_testigos_mesa').empty();
+					$('#puestos_testigos_mesa').append('<option value=0>Seleccionar puesto</option>');					
+					$.each(data, function (key, value) {
+						$('#puestos_testigos_mesa').append('<option value="' + value.id + '">' + value.nombre_puesto + '</option>');
+					});
+				}
+			});
+		});
+
+		$('#puestos_testigos_mesa').change(function () {
+			c = $(this);
+			$.ajax({
+				url: '/cargar-mesas/',
+				data: {
+					'puesto_id': c.val()
+				},
+				success: function (data) {
+					$('#mesa_testigos_mesa').empty();
+					$.each(data, function (key, value) {						
+						$('#mesa_testigos_mesa').append('<option value="' + value.id + '">' + value.nombre_mesa + '</option>');
+					});
+				}
+			});
+		});
+	</script>
+</body>
+</html>
