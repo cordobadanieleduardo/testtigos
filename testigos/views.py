@@ -62,10 +62,12 @@ def getCandidato(request):
 
 def cargar_departamentos(request):
     corp = request.GET.get('corporacion')
-    if corp != 'CMJ':
-        departamentos = Dpts.objects.all().order_by('name_dept')
+    if corp == 'CMJ':
+        departamentos = Dpts.objects.all().exclude(id_d__in=[10]).order_by('name_dept')
     else:
-        departamentos = Dpts.objects.all().exclude(id_d__in=[10,2,3,13,21]).order_by('name_dept')
+        #departamentos = Dpts.objects.all().exclude(id_d__in=[2,3,13,21]).order_by('name_dept')
+        departamentos = Dpts.objects.all().exclude(id_d__in=[1,4,5,6,7,8,9,11,12,14,15,16,17,18,19,20,22,23,24,25,26,27,28,29,30,31,32,33]).order_by('name_dept')
+        
     return JsonResponse(list(departamentos.values('id_d', 'name_dept')), safe=False) 
 
 def cargar_municipios(request):
@@ -368,26 +370,26 @@ def guardar_testico_mesa(request):
                     # desc_error 
                     candidato:Cands = getCandidato(request)
                     
-                    # t_zonas =Zonas.objects.create(
-                    #     name_table= id,
-                    #     type_witnesse= type_witnesse,
-                    #     cc= cc,
-                    #     p_name=p_name, 
-                    #     s_name= s_name,
-                    #     p_last_name=p_lastname, 
-                    #     s_last_name= s_lastname,
-                    #     email= email,
-                    #     phone= phone,
-                    #     id_z_mun= candidato.id_mun, 
-                    #     id_z_dept= candidato.id_dept,
-                    #     save_testigos=save, 
-                    #     id_user= request.user.id,
-                    #     # date_creacion=, 
-                    #     # date_export= ,
-                    #     status_export= 0, 
-                    #     status_error = 0,
-                    #     # desc_error =
-                    # )
+                    t_zonas =Zonas.objects.create(
+                        name_table= id,
+                        type_witnesse= type_witnesse,
+                        cc= cc,
+                        p_name=p_name, 
+                        s_name= s_name,
+                        p_last_name=p_lastname, 
+                        s_last_name= s_lastname,
+                        email= email,
+                        phone= phone,
+                        id_z_mun= candidato.id_mun, 
+                        id_z_dept= candidato.id_dept,
+                        save_testigos=save, 
+                        id_user= request.user.id,
+                        # date_creacion=, 
+                        # date_export= ,
+                        status_export= 0, 
+                        status_error = 0,
+                        # desc_error =
+                    )
      
                     lista = list(map(int, mesas.split(',')))  # [1, 2, 3]
                     divi = Divipole.objects.get(id=puesto)                    
