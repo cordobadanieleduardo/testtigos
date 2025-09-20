@@ -47,10 +47,10 @@ class Home( generic.TemplateView):
     template_name = 'login/index.html'
     #login_url='testigos:home'
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["departamentos"] = Dpts.objects.all().order_by('name_dept')                
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     #context["departamentos"] = Dpts.objects.all().order_by('name_dept')                
+    #     return context
 
 def getCandidato(request):
     try:
@@ -59,6 +59,14 @@ def getCandidato(request):
         candidato = None
     print('candidato',candidato)
     return candidato
+
+def cargar_departamentos(request):
+    corp = request.GET.get('corporacion')
+    if corp != 'CMJ':
+        departamentos = Dpts.objects.all().order_by('name_dept')
+    else:
+        departamentos = Dpts.objects.all().exclude(id_d__in=[10,2,3,13,21]).order_by('name_dept')
+    return JsonResponse(list(departamentos.values('id_d', 'name_dept')), safe=False) 
 
 def cargar_municipios(request):
     dept_id = request.GET.get('departamento')

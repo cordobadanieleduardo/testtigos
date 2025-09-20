@@ -299,20 +299,46 @@
 
 		corp.on("change", function (e) {
 			c = $(this);
+
+				$('#deps').empty();
+				$("#deps").hide();
+				$('#muns').empty();
+				$("#muns").hide();
+				$('#coms').empty();
+				$("#coms").hide();
+				$('#candidato').empty();
+				$("#candidato").hide();	
 			console.log('c',corp.val())
 			if (corp.val()!=='') {
-				$("#deps").show();
-				$("#muns").show();
-				$("#coms").show();
-				$("#candidato").show();				
+				$('#muns').empty();
+				$('#coms').empty();
+				$('#candidato').empty();
+
+				//$("#deps").show();
+				//$("#muns").show();
+				//$("#coms").show();
+				//$("#candidato").show();
+				
+				$.ajax({
+					url: '/cargar-departamentos/',
+					data: {
+						'corporacion': c.val()
+					},
+					success: function (data) {
+						$('#deps').empty();
+						
+						$('#deps').append('<option value=0>Seleccionar departamento</option>');
+						$.each(data, function (key, value) {
+							$('#deps').append('<option value="' + value.id_d + '">' + value.name_dept + '</option>');
+						});
+						$("#deps").show();
+					}
+				});
 			} else {
-				$("#deps").hide();
-				$("#muns").hide();
-				$("#coms").hide();
-				$("#candidato").hide();	
+			
 			}
-			getCandidatos();
-		});
+			//getCandidatos();
+		});		
 
 		$('#deps').change(function () {
 
