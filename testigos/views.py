@@ -156,7 +156,7 @@ def cargar_candidatos(request):
     #     candidatos = Cands.objects.filter(corporation=corp, id_dept=dept_id ).order_by('name_can')
     # ## elif (corp=="JAL" or dept_id==10) and (corp is not None and corp !='' and dept_id!=0 and mun_id!=0 and com_id!=0):
     # el
-    if (corp and dept_id and mun_id and com_id):
+    if (corp and dept_id and mun_id and com_id>0):
         candidatos = Cands.objects.filter(corporation=corp, id_dept=dept_id, id_mun=mun_id,id_com=com_id).order_by('name_can')  
     elif(corp and dept_id and mun_id):
         candidatos = Cands.objects.filter(corporation=corp, id_dept=dept_id, id_mun=mun_id).order_by('name_can')  

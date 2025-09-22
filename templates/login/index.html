@@ -299,15 +299,26 @@
 
 		corp.on("change", function (e) {
 			c = $(this);
-			console.log('c',corp.val())
+			//console.log('c',corp.val())
 			if (corp.val()!=='') {
-				
-
 
 				$("#deps").show();
 				$("#muns").show();
 				$("#coms").show();
 				$("#candidato").show();
+
+				$('#coms').empty();
+				$('#coms').append('<option value=0>Seleccionar localidad</option>');
+
+		
+				$('#candidato').empty();
+				$('#candidato').append('<option value=0>Seleccionar candidato</option>');
+
+
+				$('#muns').empty();
+				$('#muns').append('<option value=0>Seleccionar municipio</option>');
+
+
 				
 				$.ajax({
 					url: '/cargar-departamentos/',
@@ -323,14 +334,20 @@
 					}
 				});
 			} else {
-				$('#deps').empty();
+				//$('#deps').empty();
 				$("#deps").hide();
-				$('#muns').empty();
 				$("#muns").hide();
-				$('#coms').empty();
+				$('#muns').empty();
+				$('#muns').append('<option value=0>Seleccionar municipio</option>');
+
 				$("#coms").hide();
-				$('#candidato').empty();
+				$('#coms').empty();
+				$('#coms').append('<option value=0>Seleccionar localidad</option>');
+
 				$("#candidato").hide();	
+				$('#candidato').empty();
+				$('#candidato').append('<option value=0>Seleccionar candidato</option>');
+
 			}
 			//getCandidatos();
 		});		
@@ -339,6 +356,12 @@
 
 			//$('.coms').empty();
 			$(".coms").hide();
+			//$('#candidato').hide();
+			//$('#candidato').empty();
+			$('#candidato').empty();
+			$('#candidato').append('<option value=0>Seleccionar candidato</option>');
+
+
 			c = $(this);
 
 			$.ajax({
@@ -357,6 +380,11 @@
 		});
 
 		muns.on("change", function (e) {
+
+			$('#candidato').empty();
+			$('#candidato').append('<option value=0>Seleccionar candidato</option>');
+
+
 			$.get("/cargar-comunas/?mun=" + muns.val(), function (e) {
 				var data = e;//JSON.parse(e);
 				var cms = '<option value="0">Seleccionar localidad</option>';
@@ -370,6 +398,7 @@
 
 				if (data.length > 0) {
 					$(".coms").show();
+					
 				} else {
 					$(".coms").hide();
 				}
@@ -381,7 +410,11 @@
 		});
 
 		coms.on("change", function (e) {
-			getCandidatos();
+			$('#candidato').empty();
+			$('#candidato').append('<option value=0>Seleccionar candidato</option>');
+			if (coms.val() !== "0"){				
+				getCandidatos();
+			}
 		});
 
 		function getCandidatos() {
