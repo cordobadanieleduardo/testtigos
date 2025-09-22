@@ -195,8 +195,13 @@ def user_login(request):
             # elif user.must_change_password:
             #     return redirect('asamblea:password_change_first_login')
             # else:
+            try:
             
-            login(request, usuario_sistema.objects.get(username=user.email))
+                login(request, usuario_sistema.objects.get(username=user.email))
+            except:
+                return JsonResponse({"status" : "error", "action" : f'El candidato no tiene usuario creado'} ) 
+
+                
             return JsonResponse({"status" : "ok", "action" : "testigos"}, status=200 ) 
             #return redirect('testigos:home')
         else:

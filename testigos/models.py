@@ -3,10 +3,10 @@
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+#   * Remove `#managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+#from django.contrib.auth.models import AbstractUser
 
 class Cands(models.Model):
     id_ct = models.AutoField(primary_key=True)
@@ -19,7 +19,7 @@ class Cands(models.Model):
     email = models.CharField(max_length=150)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 't_cands'
 
 
@@ -29,7 +29,7 @@ class Coms(models.Model):
     id_mun = models.ForeignKey('Muns', models.DO_NOTHING, db_column='id_mun')
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 't_coms'
 
 
@@ -39,7 +39,7 @@ class Dpts(models.Model):
     name_dept = models.CharField(max_length=50)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 't_dpts'
 
 
@@ -50,60 +50,60 @@ class Muns(models.Model):
     id_dept = models.ForeignKey(Dpts, models.DO_NOTHING, db_column='id_dept')
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 't_muns'
 
 
-class Posts(models.Model):
-    id_p = models.AutoField(primary_key=True)
-    cod_zona = models.CharField(max_length=50)
-    cod_post = models.CharField(max_length=50)
-    name_post = models.CharField(max_length=50)
-    id_p_dept = models.ForeignKey(Dpts, models.DO_NOTHING, db_column='id_p_dept')
-    id_p_mun = models.ForeignKey(Muns, models.DO_NOTHING, db_column='id_p_mun')
-    id_p_com = models.ForeignKey(Coms, models.DO_NOTHING, db_column='id_p_com', blank=True, null=True)
+# class Posts(models.Model):
+#     id_p = models.AutoField(primary_key=True)
+#     cod_zona = models.CharField(max_length=50)
+#     cod_post = models.CharField(max_length=50)
+#     name_post = models.CharField(max_length=50)
+#     id_p_dept = models.ForeignKey(Dpts, models.DO_NOTHING, db_column='id_p_dept')
+#     id_p_mun = models.ForeignKey(Muns, models.DO_NOTHING, db_column='id_p_mun')
+#     id_p_com = models.ForeignKey(Coms, models.DO_NOTHING, db_column='id_p_com', blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = 't_posts'
-
-
-class Tables(models.Model):
-    id_t = models.AutoField(primary_key=True)
-    name_table = models.CharField(max_length=50)
-    type_witnesse = models.CharField(max_length=25, blank=True, null=True)
-    cc = models.CharField(max_length=25, blank=True, null=True)
-    p_name = models.CharField(max_length=25)
-    s_name = models.CharField(max_length=25, blank=True, null=True)
-    p_last_name = models.CharField(max_length=25)
-    s_last_name = models.CharField(max_length=25, blank=True, null=True)
-    email = models.CharField(max_length=150)
-    phone = models.CharField(max_length=15)
-    id_post = models.ForeignKey(Posts, models.DO_NOTHING, db_column='id_post')
-    save_testigos = models.IntegerField(blank=True, null=True)
-    id_user = models.ForeignKey('User', models.DO_NOTHING, db_column='id_user')
-    date_creacion = models.DateField(blank=True, null=True)
-    date_export = models.DateField(blank=True, null=True)
-    status_export = models.IntegerField()
-    status_error = models.IntegerField(blank=True, null=True)
-    desc_error = models.CharField(max_length=150, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 't_tables'
+#     class Meta:
+#         #managed = False
+#         db_table = 't_posts'
 
 
-class User(models.Model):
-# class User(AbstractUser):
-    names_user = models.CharField(max_length=150, blank=True, null=True)
-    id_candidato = models.ForeignKey(Cands, models.DO_NOTHING, db_column='id_candidato', blank=True, null=True)
+# class Tables(models.Model):
+#     id_t = models.AutoField(primary_key=True)
+#     name_table = models.CharField(max_length=50)
+#     type_witnesse = models.CharField(max_length=25, blank=True, null=True)
+#     cc = models.CharField(max_length=25, blank=True, null=True)
+#     p_name = models.CharField(max_length=25)
+#     s_name = models.CharField(max_length=25, blank=True, null=True)
+#     p_last_name = models.CharField(max_length=25)
+#     s_last_name = models.CharField(max_length=25, blank=True, null=True)
+#     email = models.CharField(max_length=150)
+#     phone = models.CharField(max_length=15)
+#     id_post = models.ForeignKey(Posts, models.DO_NOTHING, db_column='id_post')
+#     save_testigos = models.IntegerField(blank=True, null=True)
+#     id_user = models.ForeignKey('User', models.DO_NOTHING, db_column='id_user')
+#     date_creacion = models.DateField(blank=True, null=True)
+#     date_export = models.DateField(blank=True, null=True)
+#     status_export = models.IntegerField()
+#     status_error = models.IntegerField(blank=True, null=True)
+#     desc_error = models.CharField(max_length=150, blank=True, null=True)
 
-    # username=models.CharField(max_length=12,unique=True)
-    # email=models.EmailField(max_length=120,unique=True)
+#     class Meta:
+#         #managed = False
+#         db_table = 't_tables'
 
-    class Meta:
-        managed = False
-        db_table = 't_user'
+
+# class User(models.Model):
+# # class User(AbstractUser):
+#     names_user = models.CharField(max_length=150, blank=True, null=True)
+#     id_candidato = models.ForeignKey(Cands, models.DO_NOTHING, db_column='id_candidato', blank=True, null=True)
+
+#     # username=models.CharField(max_length=12,unique=True)
+#     # email=models.EmailField(max_length=120,unique=True)
+
+#     class Meta:
+#         #managed = False
+#         db_table = 't_user'
 
 
 class Zonas(models.Model):
@@ -128,7 +128,7 @@ class Zonas(models.Model):
     desc_error = models.CharField(max_length=150, blank=True, null=True)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 't_zonas'
 
 
@@ -150,7 +150,7 @@ class Zonas(models.Model):
 #     direccion = models.CharField(db_column='DIRECCION', max_length=50, blank=True, null=True)  # Field name made lowercase.
 
 #     class Meta:
-#         managed = False
+#         #managed = False
 #         db_table = 'divipole'
 
 
@@ -174,5 +174,5 @@ class Divipole(models.Model):
     mesas_ocupadas = models.JSONField(db_column='MESAS_OCUPADAS',blank=True, null=True, default=list)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'divipole'

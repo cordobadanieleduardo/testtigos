@@ -8,7 +8,7 @@
 *.pyc
 __pycache__/
 local_settings.py
-partidoverdeorg_testigos.sqlite3
+#partidoverdeorg_testigos.sqlite3
 media
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
