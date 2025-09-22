@@ -110,6 +110,10 @@ class Zonas(models.Model):
     id_t = models.AutoField(primary_key=True)
     name_table = models.CharField(max_length=50)
     type_witnesse = models.CharField(max_length=25, blank=True, null=True)
+    
+    puesto = models.CharField(max_length=25, blank=True, null=True)
+    mesa = models.CharField(max_length=25, blank=True, null=True)
+
     cc = models.CharField(max_length=25, blank=True, null=True)
     p_name = models.CharField(max_length=25)
     s_name = models.CharField(max_length=25, blank=True, null=True)

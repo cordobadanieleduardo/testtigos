@@ -264,34 +264,34 @@ class Testigos( generic.TemplateView):
             .order_by('id')
         context["puestos"] = puestos    
         
-        if (divi_dept and divi_mun and divi_coms ):   
-            mesas= Divipole.objects.filter(dd=divi_dept,mm=divi_mun,pp= divi_coms )\
-                .values('id', 'mesas','mesas_ocupadas')\
-                    .order_by('nombre_puesto')
-            #.values('id','nombre_puesto') \
-            # .annotate(total_votantes=Count('total')) \
-            # .order_by('id')    
+        # if (divi_dept and divi_mun and divi_coms ):   
+        #     mesas= Divipole.objects.filter(dd=divi_dept,mm=divi_mun,pp= divi_coms )\
+        #         .values('id', 'mesas','mesas_ocupadas')\
+        #             .order_by('nombre_puesto')
+        #     #.values('id','nombre_puesto') \
+        #     # .annotate(total_votantes=Count('total')) \
+        #     # .order_by('id')    
             
     
-        print('mesas * ', mesas)
-        num=0
-        mesas_ocupadas= []
-        if mesas:
-            num =mesas[0]['mesas']
-            mesas_ocupadas = list(mesas[0]['mesas_ocupadas']) if mesas[0]['mesas_ocupadas'] else []
-        if num >0:    
-            # mi_lista = [i for i in range(1, num)]    
-            mi_lista = []
-            for i in range(num):
-                if (i+1) not in mesas_ocupadas:                
-                    mi_lista.append({'id':int(i+1) , 'nombre_mesa':'Mesa '+str(i+1)})
-        #     return JsonResponse((mi_lista), safe=False) 
-        # else:
-        #     return JsonResponse(list(), safe=False)    
+        # print('mesas * ', mesas)
+        # num=0
+        # mesas_ocupadas= []
+        # if mesas:
+        #     num =mesas[0]['mesas']
+        #     mesas_ocupadas = list(mesas[0]['mesas_ocupadas']) if mesas[0]['mesas_ocupadas'] else []
+        # if num >0:    
+        #     # mi_lista = [i for i in range(1, num)]    
+        #     mi_lista = []
+        #     for i in range(num):
+        #         if (i+1) not in mesas_ocupadas:                
+        #             mi_lista.append({'id':int(i+1) , 'nombre_mesa':'Mesa '+str(i+1)})
+        # #     return JsonResponse((mi_lista), safe=False) 
+        # # else:
+        # #     return JsonResponse(list(), safe=False)    
             
             
     
-        #context["mesas"] = mi_lista    
+        # #context["mesas"] = mi_lista    
         
         
             
@@ -313,7 +313,9 @@ def data(request):
     
     return JsonResponse(list(lista_.values('id_t','id_z_mun__name_mun',
                                            #'name_post', ''
-                                            'name_table'
+                                            'name_table',
+                                            'mesa',
+                                            'puesto'
                                            , 'cc'
                                            , 'p_name'
                                            , 's_name'
