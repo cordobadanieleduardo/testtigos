@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-mswi31w%_q+bs@d5svcp2sk^e9osqtg2&1zur1h$$^f*mf89(m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['asambleascmj.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['testigos2025.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition

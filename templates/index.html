@@ -214,7 +214,7 @@
 						<div class="container-fluid">
 							<h3 class="tit_dep">{{departamento}} {{municipio}} {{comunidad}}</h3>
 							<br>
-							{{candidato}}
+							{% comment %} {{candidato}}
 							{{candidato.id_dept.name_dept}}
 							{{candidato.id_dept.id_d}}
 							{{candidato.id_dept.cod_dep}}
@@ -223,7 +223,7 @@
 							{{candidato.id_mun.id_m}}
 							<br>
 							{{candidato.id_com.name_com}}
-							{{candidato.id_com.id_c}}
+							{{candidato.id_com.id_c}} {% endcomment %}
 							<h5>LISTADO DE ZONAS DISPONIBLES PARA INSCRIBIR TESTIGOS DE ESCRUTINIO</h5>
 							<br>
 							<P>
@@ -239,17 +239,7 @@
 										<select class="form-control" name="coms" required id="coms">
 											<option value=0>Seleccionar zona</option>
 											{% for z in zonas %}
-												<option value="{{z.zz}}">{{z.comuna_localidad }} </option>
-											{% endfor %}
-										</select>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col">
-										<select class="form-control" name="puestos" required id="puestos">
-											<option value=0>Seleccionar puesto</option>
-											{% for d in puestos %}
-												<option value="{{d.id}}">{{d.name}}</option>
+												<option value="{{z.zz}}">{{z.zz }} </option>
 											{% endfor %}
 										</select>
 									</div>
@@ -262,10 +252,12 @@
 								<input type="text" class="form-control" id="s_lastname" name="s_lastname" placeholder="Segundo apellido">
 								<input type="number" class="form-control" id="phone" name="phone" placeholder="Celular o teléfono">
 								<input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico">
+								
+								<br>
 								<button type="submit" onclick="modal_escrutinio()" class="btn btn-primary" >
 									<i class="fa-solid fa-floppy-disk"></i>
 								</button>
-							
+							<br>
 							<!-- </form> -->
 
 
@@ -275,13 +267,9 @@
 									<th>Municipio</th>
 									<th>Zona</th>
 									<th>Cédula</th>
-									<th>Primer nombre</th>
-									<th>Segundo nombre</th>
-									<th>Primer apellido</th>
-									<th>Segundo apellido</th>
+									<th>Testigo</th>
 									<th>Teléfono</th>
 									<th>Email</th>
-									<th></th>
 								</thead>
 								<tbody>
 									<tr>
@@ -290,11 +278,7 @@
 										<td>...</td>
 										<td>...</td>
 										<td>...</td>
-										<td>...</td>
-										<td>...</td>
-										<td>...</td>
-										<td>...</td>
-										<td><button class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button></td>
+										<td>...</td>										
 									</tr>
 								</tbody>
 							</table>	
@@ -929,7 +913,8 @@
 						"sSortAscending": ": Activar para ordenar la columna de manera ascendente",
 						"sSortDescending": ": Activar para ordenar la columna de manera descendente"
 					}
-				}
+				},
+				searching: false, paging: false, info: false
 			});
 		});
 	</script>

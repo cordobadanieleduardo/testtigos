@@ -261,7 +261,7 @@ class Testigos( generic.TemplateView):
             puestos= Divipole.objects.filter(dd=divi_dept,mm=divi_mun) \
             .values('id','nombre_puesto') \
             .annotate(total_votantes=Count('total')) \
-            .order_by('id')
+            .order_by('nombre_puesto')
         context["puestos"] = puestos    
         
         # if (divi_dept and divi_mun and divi_coms ):   
@@ -377,6 +377,19 @@ def guardar_testico_mesa(request):
                     # desc_error 
                     candidato:Cands = getCandidato(request)
                     
+      
+     
+                    lista = list(map(int, mesas.split(',')))  # [1, 2, 3]
+                    divi = Divipole.objects.get(id=puesto)                    
+                    for l in lista:                        
+                        if not hasattr(divi, 'mesas_ocupadas') or divi.mesas_ocupadas is None:
+                            divi.mesas_ocupadas = []
+                        if l not in divi.mesas_ocupadas:
+                            divi.mesas_ocupadas.append(l)                    
+                    divi.save()
+                    error="ok"
+                    
+                    
                     t_zonas =Zonas.objects.create(
                         name_table= id,
                         type_witnesse= type_witnesse,
@@ -395,18 +408,16 @@ def guardar_testico_mesa(request):
                         # date_export= ,
                         status_export= 0, 
                         status_error = 0,
+                        mesa=divi.mesas_ocupadas,
+                        puesto=puesto,
+                        zona=zona
                         # desc_error =
                     )
-     
-                    lista = list(map(int, mesas.split(',')))  # [1, 2, 3]
-                    divi = Divipole.objects.get(id=puesto)                    
-                    for l in lista:                        
-                        if not hasattr(divi, 'mesas_ocupadas') or divi.mesas_ocupadas is None:
-                            divi.mesas_ocupadas = []
-                        if l not in divi.mesas_ocupadas:
-                            divi.mesas_ocupadas.append(l)                    
-                    divi.save()
-                    error="ok"
+                    
+                    
+                    
+                    
+                    
                     return JsonResponse({"status" : "ok", "action" : "/testigos"}, status=200 )
                     # return redirect('/testigos')
                     

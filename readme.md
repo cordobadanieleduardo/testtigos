@@ -7,6 +7,7 @@ py -m venv ..\venv
 
 pip install django
 pip install mysqlclient
+pip install psycopg[binary]
 
 django-admin startproject app testigos
 
