@@ -223,7 +223,7 @@
 							{{candidato.id_mun.id_m}}
 							<br>
 							{{candidato.id_com.name_com}}
-							{{candidato.id_com.id_c}} {% endcomment %}
+							{{candidato.id_com.id_c}}   {% endcomment %}
 							<h5>LISTADO DE ZONAS DISPONIBLES PARA INSCRIBIR TESTIGOS DE ESCRUTINIO</h5>
 							<br>
 							<P>
@@ -234,10 +234,20 @@
 								Teniendo esta claridad, diligencie los datos de los testigos de mesa, recuerde que usted podrá modificar la información cada vez que acceda con el mismo correo. <b>PERO, antes de dar clic en el botón azul verifique que los datos sean correctos, ya que después la mesa no estará habilitada.</b>
 							</P>
 							<!-- <form action=""> -->
+
+								<div class="row">
+									<div class="col">
+										<select class="form-control" name="escrutinio" required id="escrutinio">
+											<option>Seleccionar escrutinio</option>
+											<option value="ESCRUTINIO AUXILIAR">ESCRUTINIO AUXILIAR</option>
+											<option value="ESCRUTINIO MUNICIPAL">ESCRUTINIO MUNICIPAL</option>
+										</select>
+									</div>
+								</div>
 								<div class="row">
 									<div class="col">
 										<select class="form-control" name="coms" required id="coms">
-											<option value=0>Seleccionar zona</option>
+											<option>Seleccionar zona</option>
 											{% for z in zonas %}
 												<option value="{{z.zz}}">{{z.zz }} </option>
 											{% endfor %}
@@ -332,7 +342,7 @@
 								<div class="row">
 									<div class="col">
 										<select class="form-control" name="zonas_testigo_mesa" required id="zonas_testigo_mesa">
-											<option value=0>Seleccionar zona</option>
+											<option>Seleccionar zona</option>
 											{% for z in zonas %}
 												<option value="{{z.zz}}">{{z.zz }} </option>
 											{% endfor %}
@@ -489,6 +499,7 @@
 	<script type="text/javascript" src="{% static 'source/libraries/DataTables/js/jquery.dataTables.min.js' %}"></script>
 	<script type="text/javascript">
 		var escrutinio = $("#escrutinio");
+		var escru_zona;
 		var testigos = $("#testigos");
 		var type_testigos = "";
 		var departamento = "";
@@ -635,7 +646,7 @@
 						'<td>'+data[i].name_table+'</td>'+
 						'<td>'+data[i].mesa+'</td>';
 				} else {
-					table_tr += '<td>'+data[i].name_mun+'</td>';
+					table_tr += '<td>'+data[i].id_z_mun__name_mun+'</td>';
 					table_tr += '<td>'+zona[id]+'</td>';
 				}
 
@@ -681,16 +692,27 @@
 			
 			nombres = $("#p_name").val() + " " + $("#s_name").val();
 			apellidos = $("#p_lastname").val() + " " + $("#s_lastname").val();
+			//puesto = $("#puestos_testigos_mesa option:selected").text();
+			//mesa=$("#mesa").val();
+			var z = $("#coms").val()
+			if(z !== 'Seleccionar zona'){				
+				escru_zona= 'Zona '+$("#coms").val() + " " + $("#escrutinio option:selected").val();	
+			}
+			var e = $("#escrutinio").val()
+			if(e !== 'Seleccionar escrutinio'){				
+				escru_zona= 'Zona '+$("#coms").val() + " " + $("#escrutinio option:selected").val();	
+			}
+			else{
+				
+			}
+
 			resumen = "<b style='color: #f00; text-aling: center;'>¿Está seguro que desea guardar los cambios de forma definitiva?</b><br><br> RECUERDE que una vez de clic en aceptar no se podrá modificar la información de este testigo:<br><br>"+
 				"<ul>"+
 					"<li>Departamento <i class='fa-solid fa-right-long'></i> "+'{{candidato.id_dept.name_dept}}'+"</li>"+
 					"<li>Municipio <i class='fa-solid fa-right-long'></i> "+'{{candidato.id_mun.name_mun}}'+"</li>";
-		//	if (type_testigos != "escrutinio") {
-		//		resumen += "<li>Puesto <i class='fa-solid fa-right-long'></i> "+puesto[id]+"</li>";
-		//		resumen += "<li>Mesa <i class='fa-solid fa-right-long'></i> "+mesa[id]+"</li>";				
-		//	} else {
-		//		resumen += "<li>Zona <i class='fa-solid fa-right-long'></i> "+zona[id]+"</li>";
-		//	}
+			
+			resumen += "<li>Zona <i class='fa-solid fa-right-long'></i> "+escru_zona+"</li>";
+			
 			resumen += "<li>Cédula <i class='fa-solid fa-right-long'></i> "+$("#cc").val()+"</li>"+
 					"<li>Nombres <i class='fa-solid fa-right-long'></i> "+nombres+"</li>"+
 					"<li>Apellidos <i class='fa-solid fa-right-long'></i> "+apellidos+"</li>"+
@@ -715,18 +737,19 @@
 			apellidos = $("#p_lastname_testigo_mesa").val() + " " + $("#s_lastname_testigo_mesa").val();
 			puesto = $("#puestos_testigos_mesa option:selected").text();
 			mesa=$("#mesa_testigos_mesa").val();
-			zona=$("#zona_testigos_mesa").val();
+			//zona=$("#zona_testigos_mesa").val();
 
 			resumen = "<b style='color: #f00; text-aling: center;'>¿Está seguro que desea guardar los cambios de forma definitiva?</b><br><br> RECUERDE que una vez de clic en aceptar no se podrá modificar la información de este testigo:<br><br>"+
 				"<ul>"+
 					"<li>Departamento <i class='fa-solid fa-right-long'></i> "+'{{departamento}}'+"</li>"+
 					"<li>Municipio <i class='fa-solid fa-right-long'></i> "+'{{municipio}}'+"</li>";
-			if (type_testigos != "escrutinio") {
+			//if (type_testigos != "escrutinio") {
 				resumen += "<li>Puesto <i class='fa-solid fa-right-long'></i> "+puesto+"</li>";
 				resumen += "<li>Mesa <i class='fa-solid fa-right-long'></i> "+mesa+"</li>";				
-			} else {
-				resumen += "<li>Zona <i class='fa-solid fa-right-long'></i> "+zona+"</li>";
-			}
+			//} 
+			//else {
+			//	resumen += "<li>Zona <i class='fa-solid fa-right-long'></i> "+zona+"</li>";
+			//}
 			resumen += "<li>Cédula <i class='fa-solid fa-right-long'></i> "+$("#cc_testigo_mesa").val()+"</li>"+
 					"<li>Nombres <i class='fa-solid fa-right-long'></i> "+nombres+"</li>"+
 					"<li>Apellidos <i class='fa-solid fa-right-long'></i> "+apellidos+"</li>"+
@@ -783,7 +806,7 @@
 			puesto=$("#puestos_testigos_mesa").val();
 
 
-			data = "id="+ puesto_nombre +"&cc="+cc+"&type="+type_testigos+"&p_name="+p_name+"&s_name="+s_name+"&p_lastname="+p_lastname+"&s_lastname="+s_lastname+"&phone="+phone+"&email="+email+"&save="+type+"&mesas="+mesas+"&zona="+zona+"&puesto="+puesto+"&csrfmiddlewaretoken="+csrfToken;
+			data = "id="+ puesto_nombre +"&cc="+cc+"&type="+type_testigos+"&p_name="+p_name+"&s_name="+s_name+"&p_lastname="+p_lastname+"&s_lastname="+s_lastname+"&phone="+phone+"&email="+email+"&save="+type+"&mesas="+mesas+"&zona="+zona+"&puesto="+puesto+"&escrutinio="+escru_zona+"&csrfmiddlewaretoken="+csrfToken;
 			
 			val_email = false;
 			for (i=0; i < email.length; i++) {
@@ -803,15 +826,17 @@
 				$.post("/guardar-testigo/", data, function (e, eve) {
 					data = e; //JSON.parse(e);
 					data_tes = data.data;
-					err = data.error;
+					err = data.error;					
 					if (data.status == "ok") {
-						location.href = data.action;
 						$("#modal-body1").html("Testigo registrado");
 						modal = $("#modal-errors1");
+						$("#modal-title1").text("Testigo registrado");
 						modal.modal("show");	
+						location.href = data.action;
 					}else if (err!="") {
 						$("#modal-body1").html(err);
 						modal = $("#modal-errors1");
+						$("#modal-title1").text("ERROR");
 						modal.modal("show");					
 					} else {
 						if (type==1) {

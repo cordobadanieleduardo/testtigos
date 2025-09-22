@@ -242,7 +242,15 @@ class Testigos( generic.TemplateView):
         zonas = None
         puestos = None
         mesas = None
-        if (divi_dept  and divi_mun ):             
+        
+        if (divi_dept  and divi_mun and divi_coms):             
+        #.exclude(comuna_localidad__isnull=True)\
+        #.exclude(comuna_localidad__exact='')\
+            zonas= Divipole.objects.filter(dd=divi_dept,mm=divi_mun,comuna_localidad=candidato.id_com.name_com ) \
+            .values('zz','zz') \
+            .annotate(total_votantes=Count('total')) \
+            .order_by('zz')        
+        elif (divi_dept  and divi_mun ):             
             #.exclude(comuna_localidad__isnull=True)\
             #.exclude(comuna_localidad__exact='')\
             zonas= Divipole.objects.filter(dd=divi_dept,mm=divi_mun) \
@@ -341,22 +349,29 @@ def guardar_testico_mesa(request):
         mesas=request.POST.get('mesas')
         zona=request.POST.get('zona')
         puesto=request.POST.get('puesto')
+        escrutinio:str=request.POST.get('escrutinio')
         
         data = {}
         error =""
 
         if (save=='1'):
-            if (mesas==""):
+            if ((escrutinio.strip()).__contains__("Seleccionar escrutinio") and type_witnesse =="escrutinio"):
+                error = "Debe seleccionar Escrutinio Auxiliar o Municipal"
+                #data = []
+            elif (((zona.strip()).__contains__("Seleccionar zona") or (zona.strip()).__contains__("undefined")  ) and type_witnesse =="escrutinio"):
+                error = "Debe seleccionar zona"
+                #data = []
+            elif (mesas=="" and type_witnesse !="escrutinio"):
                 error = "Debe seleccionar al menos una mesa"
                 #data = []
             elif (cc=="" or p_name=="" or p_lastname=="" or phone=="" or email==""):
                 error = "No se puede registrar este usuario, ya que los datos requeridos deben estar diligenciados"
                 #data = []
             else:
-                if (type_witnesse =="escrutinio"):
-                    pass
-                    #rep = new ConfigureSentence("t_zonas");
-                else:                
+                # if (type_witnesse =="escrutinio"):
+                #     pass
+                #     #rep = new ConfigureSentence("t_zonas");
+                # else:                
                     # name_table 
                     # type_witnesse 
                     # cc 
@@ -375,50 +390,54 @@ def guardar_testico_mesa(request):
                     # status_export 
                     # status_error 
                     # desc_error 
-                    candidato:Cands = getCandidato(request)
-                    
-      
-     
+                divi = None
+                candidato:Cands = getCandidato(request)
+                lista = list()
+                if (type_witnesse !="escrutinio"):
+                       
                     lista = list(map(int, mesas.split(',')))  # [1, 2, 3]
                     divi = Divipole.objects.get(id=puesto)                    
                     for l in lista:                        
                         if not hasattr(divi, 'mesas_ocupadas') or divi.mesas_ocupadas is None:
                             divi.mesas_ocupadas = []
                         if l not in divi.mesas_ocupadas:
-                            divi.mesas_ocupadas.append(l)                    
-                    divi.save()
-                    error="ok"
-                    
-                    
-                    t_zonas =Zonas.objects.create(
-                        name_table= id,
-                        type_witnesse= type_witnesse,
-                        cc= cc,
-                        p_name=p_name, 
-                        s_name= s_name,
-                        p_last_name=p_lastname, 
-                        s_last_name= s_lastname,
-                        email= email,
-                        phone= phone,
-                        id_z_mun= candidato.id_mun, 
-                        id_z_dept= candidato.id_dept,
-                        save_testigos=save, 
-                        id_user= request.user.id,
-                        # date_creacion=, 
-                        # date_export= ,
-                        status_export= 0, 
-                        status_error = 0,
-                        mesa=divi.mesas_ocupadas,
-                        puesto=puesto,
-                        zona=zona
-                        # desc_error =
-                    )
-                    
-                    
-                    
-                    
-                    
-                    return JsonResponse({"status" : "ok", "action" : "/testigos"}, status=200 )
+                            divi.mesas_ocupadas.append(l) 
+                    if divi:                   
+                        divi.save()
+                
+                if (type_witnesse =="escrutinio"):
+                    zona = escrutinio
+                    id= zona
+                
+                t_zonas =Zonas.objects.create(
+                    name_table= id,
+                    type_witnesse= type_witnesse,
+                    cc= cc,
+                    p_name=p_name, 
+                    s_name= s_name,
+                    p_last_name=p_lastname, 
+                    s_last_name= s_lastname,
+                    email= email,
+                    phone= phone,
+                    id_z_mun= candidato.id_mun, 
+                    id_z_dept= candidato.id_dept,
+                    save_testigos=save, 
+                    id_user= request.user.id,
+                    # date_creacion=, 
+                    # date_export= ,
+                    status_export= 0, 
+                    status_error = 0,
+                    mesa=lista if divi else None,
+                    puesto=puesto,
+                    zona=zona
+                    # desc_error =
+                )
+                
+                error="ok"
+                
+                
+                
+                return JsonResponse({"status" : "ok", "action" : "/testigos"}, status=200 )
                     # return redirect('/testigos')
                     
                     # div= Divipole.objects.filter(id=puesto).update(mesas_ocupadas=[lista])
