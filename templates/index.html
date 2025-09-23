@@ -332,7 +332,7 @@
 						<h3 class="tit_dep">{{departamento}} {{municipio}} {{candidato.id_com.name_com}}</h3>
 						<br>
 
-						<h5>LISTADO DE ZONAS DISPONIBLES PARA INSCRIBIR TESTIGOS DE MESA REMANENTE</h5>
+						<h5 id="init_2_title">LISTADO DE ZONAS DISPONIBLES PARA INSCRIBIR TESTIGOS DE MESA REMANENTE</h5>
 						<br>
 						<P>
 							Revise las mesas de votación que están disponibles a continuación, recuerde que si no aparece es porque ya hay un testigo inscrito en esa mesa. <b>TENGA EN CUENTA que el número de cédula de ciudadanía o tarjeta de identidad no debe tener puntos ni comas al igual que el número de teléfono. </b>
@@ -561,8 +561,9 @@
 		
 		function init_testigos(type_t) {
 			$("#snpr").show();
-			if (type_t=="predeterminado") {
+			if (type_t=="predeterminado") {				
 				$("#init_title").text("TESTIGOS DE MESA");
+				$("#init_2_title").text("LISTADO DE ZONAS DISPONIBLES PARA INSCRIBIR TESTIGOS DE MESA");
 			} else {
 				$("#init_title").text("TESTIGOS REMANENTES");
 			}
