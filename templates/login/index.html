@@ -397,7 +397,7 @@
 				}
 
 				coms.html(cms);
-				console.log('comunas',data.length)
+				//console.log('comunas',data.length)
 
 				if (data.length > 0) {
 					$(".coms").show();
@@ -425,7 +425,7 @@
 			if (corp.val() != '' && deps.val() != 0 && muns.val() != 0) {
 				$.get("/cargar-candidatos/?corp=" + corp.val() + "&dep=" + deps.val() + "&mun=" + muns.val() + "&com=" + coms.val(), function (e) {
 					var data = e;//JSON.parse(e);
-					console.log(data)
+					//console.log(data)
 					var cts = '<option value="">Seleccionar candidato</option>';
 					for (i = 0; i < data.length; i++) {
 						cts += '<option value="' + data[i].id_ct + '">' + data[i].name_can + '</option>';

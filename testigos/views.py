@@ -57,7 +57,7 @@ def getCandidato(request):
         candidato = Cands.objects.filter(email = request.user.email).first()
     except Cands.DoesNotExist:
         candidato = None
-    print('candidato',candidato)
+    #print('candidato',candidato)
     return candidato
 
 def cargar_departamentos(request):
@@ -92,7 +92,7 @@ def cargar_zonas(request):
 def cargar_puestos(request):
     candidato:Cands = getCandidato(request)  
     zz:int = int(request.GET.get('zz',0)) 
-    if (candidato.id_dept and candidato.id_mun and zz>0 ):    
+    if (candidato.id_dept and candidato.id_mun  ):    
         puestos = Divipole.objects\
                     .filter(dd=candidato.id_dept.cod_dep,mm=candidato.id_mun.cod_mun,zz=zz)\
                     .values('id', 'nombre_puesto')\
@@ -116,7 +116,7 @@ def cargar_mesas(request):
             .values('id', 'mesas','mesas_ocupadas')\
             .order_by('nombre_puesto')
     
-    print('mesas * ', mesas)
+    #print('mesas * ', mesas)
     num=0
     mesas_ocupadas= []
     if mesas:
@@ -145,10 +145,10 @@ def cargar_candidatos(request):
     com_id = int(com_id) if com_id else None
 
     
-    print('corp',corp)
-    print('dept_id',dept_id)
-    print('mun_id', mun_id)
-    print('com_id',com_id)
+    #print('corp',corp)
+    #print('dept_id',dept_id)
+    #print('mun_id', mun_id)
+    #print('com_id',com_id)
     
     # if corp == "ALCALDE" or corp=="CONCEJO":        
     #     candidatos = Cands.objects.filter(corporation=corp, id_dept=dept_id, id_mun=mun_id ).order_by('name_can')
@@ -181,8 +181,8 @@ def user_login(request):
         candidato =  int(request.POST.get('candidato')) if request.POST.get('candidato') else None 
         email = request.POST.get('email')
         
-        print('candidato',candidato)
-        print('email',email)
+        #print('candidato',candidato)
+        #print('email',email)
 
         #user = authenticate(request, username=username, password=password)
         
@@ -258,10 +258,10 @@ class Testigos( generic.TemplateView):
             .annotate(total_votantes=Count('total')) \
             .order_by('zz')
 
-        print('dept',divi_dept)
-        print('municipio',divi_mun)
-        print('comuna',divi_coms)
-        print('zonassssss',zonas)
+        #print('dept',divi_dept)
+        #print('municipio',divi_mun)
+        #print('comuna',divi_coms)
+        #print('zonassssss',zonas)
         #print(zonas.count())
         context["zonas"] = zonas
                 
@@ -315,8 +315,8 @@ def data(request):
     #     candidato = None
     # print(candidato)
     type = request.GET.get('type_testigos')
-    print(request.user.id)
-    print('type',type)
+    #print(request.user.id)
+    #print('type',type)
     lista_ = Zonas.objects.filter(id_user=request.user.id, type_witnesse=type)
     
     return JsonResponse(list(lista_.values('id_t','id_z_mun__name_mun',
