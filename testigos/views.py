@@ -42,15 +42,15 @@ class SinPrivilegios(LoginRequiredMixin, PermissionRequiredMixin, MixinFormInval
             self.login_url='testigos:sin_privilegios'
         return HttpResponseRedirect(reverse_lazy(self.login_url))
     
-# class Home(LoginRequiredMixin, generic.TemplateView):
 class Home( generic.TemplateView):
     template_name = 'login/index.html'
-    #login_url='testigos:home'
+    login_url='testigos:testigos'
     
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     #context["departamentos"] = Dpts.objects.all().order_by('name_dept')                
-    #     return context
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            # if request.user.must_change_password:
+            return redirect('testigos:testigos')
+        return super().dispatch(request, *args, **kwargs)
 
 def getCandidato(request):
     try:
