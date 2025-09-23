@@ -204,8 +204,16 @@
 				<div>
 					<div id="btn-escrutinio">
 						<div class="tp-testigos">
-							En esta sección usted podrá inscribir los <b>testigos de escrutinio</b>, estos testigos se registraran por zona, por favor verifique que los datos sean correctos, <b>recuerde que el número de cédula no debe tener ni puntos ni comas, al igual que el número de teléfono.</b> Al finalizar verifique que el correo y número de teléfono sean correctos ya que <b>Registraduría va a estar enviando las notificaciones</b> a través de estos canales de comunicación.
-							<br><br><br><br>
+							En esta sección usted podrá inscribir los <b>testigos de escrutinio</b>, estos testigos se registraran por zona, por favor verifique que los datos sean correctos, <b>recuerde que el número de documento no debe tener ni puntos ni comas, al igual que el número de teléfono.</b> Al finalizar verifique que el correo y número de teléfono sean correctos ya que <b>Registraduría va a estar enviando las notificaciones</b> a través de estos canales de comunicación.
+							<br><br>
+							<b>¿Qué es un testigo de escrutinio?</b>
+							<br>
+							Velan por el normal funcionamiento de las comisiones escrutadoras que consolidan los resultados electorales y también presentar reclamaciones ante ellas de acuerdo con lo establecido en el Código Electoral Colombiano, el día posterior a las elecciones.
+							
+							
+							<br><br>
+
+							<iframe src="https://alianzaverde.org.co/images/PDF/CMJ_CLJ_2025/Cartilla_Testigos_de_Comisiones_Escrutadoras_CNE.pdf" width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
 						</div>
 						<button class="btn btn-success" onclick="init_escrutinio()">Agregar testigos de escrutinio</button>
 					</div>
@@ -257,7 +265,7 @@
 									</div>
 								</div>
 							
-								<input type="number" class="form-control" id="cc" name="cc" placeholder="Cédula">
+								<input type="number" class="form-control" id="cc" name="cc" placeholder="Cédula de ciudadanía o tarjeta de identidad" maxlength="20">
 								<input type="text" class="form-control" id="p_name" name="p_name" placeholder="Primer nombre">
 								<input type="text" class="form-control" id="s_name" name="s_name" placeholder="Segundo nombre">
 								<input type="text" class="form-control" id="p_lastname" name="p_lastname" placeholder="Primer apellido">
@@ -316,11 +324,25 @@
 						<div class="tp-testigos">
 							En esta sección usted podrá inscribir los testigos de mesa o testigos remanentes. 
 							<br><br>
-							En caso de querer agregar <b>testigos de mesa</b> haga clic en el botón "Agregar testigos de mesa" y le aparecerá el listado de puestos disponibles. En cada puesto podrá diligenciar la información del testigo, al finalizar haga clic en el botón azul de "guardar". 
+							<b>¿Qué es un testigo electoral?</b><br>
+							Supervisan las votaciones y presentar reclamaciones ante los jurados de votación, en un puesto y mesa especifico el día de las elecciones. 
+							
 							<br><br>
-							Por otro lado, en caso de agregar <b>testigos remanentes</b>, deberá realizar el mismo proceso. Haga clic en el botón "Agregar testigos remanentes" y podrá diligenciar la información del testigo en el puesto de votación correspondiente. 
+							<b>¿Qué es un testigo remanente?</b><br>
+							Tiene las mimas funciones que el testigo electoral. El término remanente se refiere a que se trata de un suplente, parcial o total, al testigo electoral principal, dependiendo de determinadas circunstancias.
 							<br><br>
-							<b>POR FAVOR</b>, verifique que los datos estén correctamente diligenciados, <b>recuerde que el número de cédula no debe tener ni puntos ni comas al igual que el número de teléfono.</b> Al finalizar verifique que el correo y número de teléfono sean correctos ya que <b>Registraduría va a estar enviando las notificaciones</b> a través de estos canales de comunicación.
+
+							<iframe src="https://alianzaverde.org.co/images/PDF/CMJ_CLJ_2025/Cartilla_Testigos_de_Mesa.pdf" width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
+							<br><br>
+							
+							En caso de querer agregar testigos de mesa haga clic en el botón "Agregar testigos de mesa" y le aparecerá el listado de puestos disponibles. En cada puesto podrá diligenciar la información del testigo, al finalizar haga clic en el botón azul de "guardar".
+							<br><br>
+
+							Por otro lado, en caso de agregar testigos remanentes, deberá realizar el mismo proceso. Haga clic en el botón "Agregar testigos remanentes y podrá diligenciar la información del testigo en el puesto de votación correspondiente.
+							<br><br>
+
+							<b> POR FAVOR</b>, verifique que los datos estén correctamente diligenciados, recuerde que el número de documento no debe tener ni puntos ni comas al igual que el número de teléfono. Al finalizar verifique que el correo y número de teléfono sean correctos ya que Registraduría va a estar enviando las notificaciones a través de estos canales de comunicación
+
 						</div>
 						<div class="d-flex justify-content-center">
 							<button class="btn btn-success m-2"  onclick="init_testigos('predeterminado')">Agregar testigos de mesa</button>
@@ -375,7 +397,7 @@
 									</div>
 								</div>
 								
-								<input type="number" class="form-control" id="cc_testigo_mesa" name="cc_testigo_mesa" placeholder="Cédula" required>
+								<input type="number" class="form-control" id="cc_testigo_mesa" name="cc_testigo_mesa" placeholder="Cédula de ciudadanía o tarjeta de identidad" required>
 								<input type="text" class="form-control" id="p_name_testigo_mesa" name="p_name_testigo_mesa" placeholder="Primer nombre">
 								<input type="text" class="form-control" id="s_name_testigo_mesa" name="s_name_testigo_mesa" placeholder="Segundo nombre">
 								<input type="text" class="form-control" id="p_lastname_testigo_mesa" name="p_lastname_testigo_mesa" placeholder="Primer apellido">
