@@ -213,9 +213,9 @@ def user_login(request):
     ##return render(request, 'login/index.html')
     
 
-class Testigos( generic.TemplateView):
+class Testigos(LoginRequiredMixin, generic.TemplateView):
     template_name = 'index.html'
-    #login_url='testigos:home'
+    login_url='testigos:home'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)                
