@@ -23,6 +23,12 @@ class Cands(models.Model):
     class Meta:
         #managed = False
         db_table = 't_cands'
+        verbose_name="Candidato"
+        verbose_name_plural="Candidatos"
+        ordering=['name_can']
+
+    def __str__(self):
+        return f"{str(self.id_ct) + ' '+ self.name_can }"
 
 
 class Coms(models.Model):
@@ -33,6 +39,8 @@ class Coms(models.Model):
     class Meta:
         #managed = False
         db_table = 't_coms'
+    def __str__(self):
+        return f"{str(self.name_com)}"
 
 
 class Dpts(models.Model):
@@ -44,6 +52,9 @@ class Dpts(models.Model):
         #managed = False
         db_table = 't_dpts'
 
+    def __str__(self):
+        return f"{str(self.name_dept)}"
+
 
 class Muns(models.Model):
     id_m = models.AutoField(primary_key=True)
@@ -54,6 +65,9 @@ class Muns(models.Model):
     class Meta:
         #managed = False
         db_table = 't_muns'
+
+    def __str__(self):
+        return f"{str(self.name_mun)}"
 
 
 # class Posts(models.Model):
