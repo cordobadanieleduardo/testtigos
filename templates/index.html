@@ -145,7 +145,7 @@
 	    	height: 150px;
 	    	font-size: 2em;
 	    }
-		/*@media(max-width: 650px) {
+		@media(max-width: 650px) {
 			.t_escrutinio {
 				position: absolute;
 				left: 0;
@@ -161,7 +161,7 @@
 				right: 0;
 				width: 100%;
 			}
-		}*/
+		}
 
 	</style>
 	<div class="snpr" id="snpr">
@@ -183,7 +183,9 @@
 					<div>
 						<small>usuario</small>
 						<br>
-						<small><b id="user"> {{request.user.get_full_name | upper }} </b></small>
+						<small>
+							<b id="user"> {{request.user.get_full_name | upper }} </b>
+						</small>
 					</div>
 				</div>
 				<div class="logo_user">
