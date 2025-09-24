@@ -47,6 +47,8 @@ class Home( generic.TemplateView):
     login_url='testigos:testigos'
     
     def dispatch(self, request, *args, **kwargs):
+        # if request.user.is_superuser:
+        #     return redirect('/admin')
         if request.user.is_authenticated:
             # if request.user.must_change_password:
             return redirect('testigos:testigos')
@@ -216,6 +218,11 @@ def user_login(request):
 class Testigos(LoginRequiredMixin, generic.TemplateView):
     template_name = 'index.html'
     login_url='testigos:home'
+    
+        
+    # def dispatch(self, request, *args, **kwargs):
+    #     if request.user.is_superuser and not request.user.is_authenticated:
+    #         return redirect('/admin')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)                
