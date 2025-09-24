@@ -222,3 +222,6 @@ class Divipole(models.Model):
         verbose_name="Divipole"
         verbose_name_plural="Divipole"
         ordering=['id']
+
+    def __str__(self):
+            return f"{str(self.nombre_puesto)}"
