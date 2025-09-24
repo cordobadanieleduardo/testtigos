@@ -221,8 +221,4 @@ class Divipole(models.Model):
         db_table = 'divipole'
         verbose_name="Divipole"
         verbose_name_plural="Divipole"
-        ordering=['id', ]
-        
-    def __str__(self):
-        return f"{str(self.id)}"
-    
+        ordering=['id']
