@@ -29,4 +29,4 @@ class DivipoleAdmin(admin.ModelAdmin):
 
 admin.site.register(Cands, CandsAdmin)
 admin.site.register(Zonas, ZonasAdmin)
-admin.site.register(Divipole, DivipoleAdmin)    
+#admin.site.register(Divipole, DivipoleAdmin)    
