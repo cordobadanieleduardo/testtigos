@@ -403,7 +403,7 @@ def guardar_testico_mesa(request):
                 if (type_witnesse !="escrutinio"):
                        
                     lista = list(map(int, mesas.split(',')))  # [1, 2, 3]
-                    divi = Divipole.objects.get(id=puesto)                    
+                    divi = Divipole.objects.filter(id=puesto).first()
                     for l in lista:                        
                         if not hasattr(divi, 'mesas_ocupadas') or divi.mesas_ocupadas is None:
                             divi.mesas_ocupadas = []
