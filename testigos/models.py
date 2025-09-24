@@ -219,3 +219,10 @@ class Divipole(models.Model):
     class Meta:
         #managed = False
         db_table = 'divipole'
+        verbose_name="Divipole"
+        verbose_name_plural="Divipole"
+        ordering=['id', ]
+        
+    def __str__(self):
+        return f"{str(self.id)}"
+    

@@ -19,9 +19,14 @@ class ZonasAdmin(admin.ModelAdmin):
                      'id_z_mun','id_z_dept','id_z_com','id_user'
                      )
 
-# class ZonasAdmin(admin.ModelAdmin):
-#     model = Divipole
-    
-    
+class DivipoleAdmin(admin.ModelAdmin):
+    model = Divipole
+    list_display =  ('id','dd','mm','zz',
+                     'pp', 'depto','municipio','nombre_puesto',
+                     'total','mesas','cod_com','comuna_localidad','direccion',
+                     'mesas_ocupadas',
+                     )
+
 admin.site.register(Cands, CandsAdmin)
 admin.site.register(Zonas, ZonasAdmin)
+admin.site.register(Divipole, DivipoleAdmin)    
