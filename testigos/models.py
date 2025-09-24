@@ -224,4 +224,4 @@ class Divipole(models.Model):
         ordering=['id']
 
     def __str__(self):
-            return f"{str(self.nombre_puesto)}"
+            return self.id
