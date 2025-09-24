@@ -7,7 +7,8 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.utils import timezone
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 #from django.contrib.auth.models import AbstractUser
 
 class Cands(models.Model):
@@ -39,6 +40,9 @@ class Coms(models.Model):
     class Meta:
         #managed = False
         db_table = 't_coms'
+        verbose_name="Comuna/Localidad"
+        verbose_name_plural="Comunidades/Localidades"
+                
     def __str__(self):
         return f"{str(self.name_com)}"
 
@@ -51,6 +55,8 @@ class Dpts(models.Model):
     class Meta:
         #managed = False
         db_table = 't_dpts'
+        verbose_name="Departamento"
+        verbose_name_plural="Departamentos"
 
     def __str__(self):
         return f"{str(self.name_dept)}"
@@ -65,6 +71,8 @@ class Muns(models.Model):
     class Meta:
         #managed = False
         db_table = 't_muns'
+        verbose_name="Municipio"
+        verbose_name_plural="Municipios"
 
     def __str__(self):
         return f"{str(self.name_mun)}"
@@ -140,8 +148,10 @@ class Zonas(models.Model):
     phone = models.CharField(max_length=15)
     id_z_mun = models.ForeignKey(Muns, models.DO_NOTHING, db_column='id_z_mun')
     id_z_dept = models.ForeignKey(Dpts, models.DO_NOTHING, db_column='id_z_dept')
+    id_z_com = models.ForeignKey(Coms, models.DO_NOTHING, db_column='id_z_com', blank=True, null=True)
     save_testigos = models.IntegerField(blank=True, null=True)
-    id_user = models.IntegerField()
+    # id_user = models.IntegerField()
+    id_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, db_column='id_user')
     date_creacion = models.DateField(blank=True, null=True)
     date_export = models.DateField(blank=True, null=True)
     status_export = models.IntegerField()
@@ -151,13 +161,19 @@ class Zonas(models.Model):
     class Meta:
         #managed = False
         db_table = 't_zonas'
+        verbose_name="Zona"
+        verbose_name_plural="Zonas"
+        ordering=['type_witnesse', ]
         
     def save(self, *args, **kwargs):
         if not self.date_creacion:
             self.date_creacion = timezone.now().date()
         super().save(*args, **kwargs)
 
-
+    def __str__(self):
+        return f"{str(self.name_table)}"
+    
+    
 
 # class Divipole(models.Model):
 #     id = models.AutoField(db_column='ID',primary_key=True)
