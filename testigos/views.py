@@ -84,12 +84,49 @@ def cargar_comunas(request):
 
 def cargar_zonas(request):
     candidato:Cands = getCandidato(request)    
-    if (candidato.id_dept and candidato.id_mun ):    
-        puestos = Divipole.objects\
-                    .filter(dd=candidato.id_dept,mm=candidato.id_mun)\
-                    .values('zz', 'zz')\
-                    .order_by('zz')        
-    return JsonResponse(list(puestos), safe=False) 
+    # if (candidato.id_dept and candidato.id_mun ):    
+    #     puestos = Divipole.objects\
+    #                 .filter(dd=candidato.id_dept,mm=candidato.id_mun)\
+    #                 .values('zz', 'zz')\
+    #                 .order_by('zz')        
+    # return JsonResponse(list(puestos), safe=False) 
+
+    try:
+        divi_dept=int(candidato.id_dept.cod_dep)
+    except:
+        divi_dept= None
+    try:
+        divi_mun=int(candidato.id_mun.cod_mun)
+    except:
+        divi_mun= None  
+    
+    try:
+        divi_coms=int(candidato.id_com_id)
+    except:
+        divi_coms= None  
+    
+    zonas = None
+    puestos = None
+    mesas = None
+
+    if (divi_dept  and divi_mun and divi_coms):             
+    #.exclude(comuna_localidad__isnull=True)\
+    #.exclude(comuna_localidad__exact='')\
+        zonas= Divipole.objects.filter(dd=divi_dept,mm=divi_mun,comuna_localidad=candidato.id_com.name_com ) \
+        .values('zz','zz') \
+        .annotate(total_votantes=Count('total')) \
+        .order_by('zz')        
+    elif (divi_dept  and divi_mun ):             
+        #.exclude(comuna_localidad__isnull=True)\
+        #.exclude(comuna_localidad__exact='')\
+        zonas= Divipole.objects.filter(dd=divi_dept,mm=divi_mun) \
+        .values('zz','zz') \
+        .annotate(total_votantes=Count('total')) \
+        .order_by('zz')
+        
+    return JsonResponse(list(zonas), safe=False) 
+
+    
 
 def cargar_puestos(request):
     candidato:Cands = getCandidato(request)  
@@ -272,12 +309,12 @@ class Testigos(LoginRequiredMixin, generic.TemplateView):
         #print(zonas.count())
         context["zonas"] = zonas
                 
-        if (divi_dept and divi_mun ):   
-            puestos= Divipole.objects.filter(dd=divi_dept,mm=divi_mun) \
-            .values('id','nombre_puesto') \
-            .annotate(total_votantes=Count('total')) \
-            .order_by('nombre_puesto')
-        context["puestos"] = puestos    
+        # if (divi_dept and divi_mun ):   
+        #     puestos= Divipole.objects.filter(dd=divi_dept,mm=divi_mun) \
+        #     .values('id','nombre_puesto') \
+        #     .annotate(total_votantes=Count('total')) \
+        #     .order_by('nombre_puesto')
+        #context["puestos"] = puestos    
         
         # if (divi_dept and divi_mun and divi_coms ):   
         #     mesas= Divipole.objects.filter(dd=divi_dept,mm=divi_mun,pp= divi_coms )\
@@ -365,7 +402,7 @@ def guardar_testico_mesa(request):
             if ((escrutinio.strip()).__contains__("Seleccionar escrutinio") and type_witnesse =="escrutinio"):
                 error = "Debe seleccionar Escrutinio Auxiliar o Municipal"
                 #data = []
-            elif (((zona.strip()).__contains__("Seleccionar zona") or (zona.strip()).__contains__("undefined")  ) and type_witnesse =="escrutinio"):
+            if (((zona.strip()).__contains__("Seleccionar zona") or (zona.strip()).__contains__("undefined")  ) and type_witnesse =="escrutinio"):
                 error = "Debe seleccionar zona"
                 #data = []
             elif (mesas=="" and type_witnesse !="escrutinio"):

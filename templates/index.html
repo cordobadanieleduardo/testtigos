@@ -281,8 +281,8 @@
 
 								<div class="row">
 									<div class="col">
-										<select class="form-control" name="escrutinio" required id="escrutinio">
-											<option>Seleccionar escrutinio</option>
+										<select class="form-control" name="select_escrutinio" required id="select_escrutinio">
+											<option value="">Seleccionar escrutinio</option>
 											<option value="ESCRUTINIO ZONAL / AUXILIAR">ESCRUTINIO ZONAL / AUXILIAR</option>
 											<option value="ESCRUTINIO MUNICIPAL">ESCRUTINIO MUNICIPAL</option>
 										</select>
@@ -760,15 +760,12 @@
 			//puesto = $("#puestos_testigos_mesa option:selected").text();
 			//mesa=$("#mesa").val();
 			var z = $("#coms").val()
-			if(z !== 'Seleccionar zona'){				
-				escru_zona= 'Zona '+$("#coms").val() + " " + $("#escrutinio option:selected").val();	
-			}
-			var e = $("#escrutinio").val()
-			if(e !== 'Seleccionar escrutinio'){				
-				escru_zona= 'Zona '+$("#coms").val() + " " + $("#escrutinio option:selected").val();	
-			}
-			else{
 
+			if( $('#select_escrutinio').val() === 'ESCRUTINIO MUNICIPAL' ){				
+				escru_zona= $("#escrutinio option:selected").val();	
+			
+			} else if ($('#select_escrutinio').val() === 'ESCRUTINIO ZONAL / AUXILIAR' ) {
+				escru_zona= 'Zona '+$("#coms").val() + " " + $("#escrutinio option:selected").val();			
 			}
 
 			resumen = "<b style='color: #f00; text-aling: center;'>¿Está seguro que desea guardar los cambios de forma definitiva?</b><br><br> RECUERDE que una vez de clic en aceptar no se podrá modificar la información de este testigo:<br><br>"+
@@ -867,7 +864,7 @@
 			let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 			puesto_nombre = $("#puestos_testigos_mesa option:selected").text();
 			mesas=$("#mesa_testigos_mesa").val();
-			zona=$("#coms").val();
+			zona=$("#coms"+id).val();
 			puesto=$("#puestos_testigos_mesa").val();
 
 
@@ -923,6 +920,30 @@
 //				// location.href='login/index.html';
 			}
 		}
+
+		$('#select_escrutinio').change(function () {
+			c = $(this);	
+			if(c.val() ==='ESCRUTINIO MUNICIPAL' ){				
+				$('#coms').hide()
+				$('#coms').empty()				
+			}else if (c.val() === 'ESCRUTINIO ZONAL / AUXILIAR' ) {
+				
+				$.ajax({
+					url: '/cargar-zonas/',
+					success: function (data) {
+						$('#coms').empty();
+						$('#coms').append('<option>Seleccionar zona</option>');
+						$.each(data, function (key, value) {
+							$('#coms').append('<option value="' + value.zz + '">' + value.zz + '</option>');
+						});
+					}
+				});								
+				$('#coms').show()				
+			}else {
+				$('#coms').hide()
+				$('#coms').empty()	
+			}
+		});
 
 		$('#coms').change(function () {
 			c = $(this);
