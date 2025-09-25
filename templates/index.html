@@ -254,67 +254,71 @@
 					<div class="home">
 						<br>
 						<div class="container-fluid">
+							<button class="btn btn-success home" onclick="home()"><i class="fa-solid fa-house"></i> Inicio</button>
+							<button class="btn btn-primary" onclick="returnLogin()">
+								<i class="fa-solid fa-user" ></i> Volver al login
+							</button>
+							<br>
+							<br>
 							<h3 class="tit_dep">{{departamento}} {{municipio}} {{comunidad}}</h3>
-							<br>
-							{% comment %} {{candidato}}
-							{{candidato.id_dept.name_dept}}
-							{{candidato.id_dept.id_d}}
-							{{candidato.id_dept.cod_dep}}
-							<br>
-							{{candidato.id_mun.name_mun}}
-							{{candidato.id_mun.id_m}}
-							<br>
-							{{candidato.id_com.name_com}}
-							{{candidato.id_com.id_c}}   {% endcomment %}
-							<h5>LISTADO DE ZONAS DISPONIBLES PARA INSCRIBIR TESTIGOS DE ESCRUTINIO</h5>
-							<br>
-							<P>
-								<b>Desde el Partido Alianza Verde, les recomendamos que al elegir a sus Testigos de Escrutinio tengan en cuenta que las personas puedan tener conocimiento sobre el proceso de reclamaciones y solicitud de reconteo de votos por anomalías en el proceso.</b>
-								<br><br>
-								Por eso, revise la zonas de votación disponibles a continuación, recuerde que si no aparece es porque ya hay un testigo inscrito en esa mesa. <b>TENGA EN CUENTA que el número de cédula de ciudadanía o tarjeta de identidad no debe tener puntos ni comas al igual que el número de teléfono.</b>
-								<br><br>
-								Teniendo esta claridad, diligencie los datos de los testigos de mesa. 
-								<br>
-								<b>Antes de dar clic en el botón azul verifique que los datos sean correctos, ya que después la mesa no estará habilitada.</b>
-							</P>
-							<!-- <form action=""> -->
-
-								<div class="row">
-									<div class="col">
-										<select class="form-control" name="select_escrutinio" required id="select_escrutinio">
-											<option value="">Seleccionar escrutinio</option>
-											<option value="ESCRUTINIO ZONAL / AUXILIAR">ESCRUTINIO ZONAL / AUXILIAR</option>
-											<option value="ESCRUTINIO MUNICIPAL">ESCRUTINIO MUNICIPAL</option>
-										</select>
+												
+							<div class="d-inline-flex " >
+								<div class="row">							
+									<div class="col-12 col-md-6 p-3">
+										<h5>LISTADO DE ZONAS DISPONIBLES PARA INSCRIBIR TESTIGOS DE ESCRUTINIO</h5>
+										<p>
+											<b>Desde el Partido Alianza Verde, les recomendamos que al elegir a sus Testigos de Escrutinio tengan en cuenta que las personas puedan tener conocimiento sobre el proceso de reclamaciones y solicitud de reconteo de votos por anomalías en el proceso.</b>
+											<br><br>
+											Por eso, revise la zonas de votación disponibles a continuación, recuerde que si no aparece es porque ya hay un testigo inscrito en esa mesa. <b>TENGA EN CUENTA que el número de cédula de ciudadanía o tarjeta de identidad no debe tener puntos ni comas al igual que el número de teléfono.</b>
+											<br><br>
+											Teniendo esta claridad, diligencie los datos de los testigos de mesa. 
+											<br>
+											<b>Antes de dar clic en el botón azul verifique que los datos sean correctos, ya que después la mesa no estará habilitada.</b>
+										</p>
+									</div>
+									<div class="col-12 col-md-6 p-3">
+										<div class="row">													
+											<div class="col">
+												<select class="form-control" name="select_escrutinio" required id="select_escrutinio">
+													<option value="">Seleccionar escrutinio</option>
+													<option value="ESCRUTINIO ZONAL / AUXILIAR">ESCRUTINIO ZONAL / AUXILIAR</option>
+													<option value="ESCRUTINIO MUNICIPAL">ESCRUTINIO MUNICIPAL</option>
+												</select>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col">
+												<select class="form-control" name="coms" required id="coms">
+													<option>Seleccionar zona</option>
+													{% for z in zonas %}
+														<option value="{{z.zz}}">{{z.zz }} </option>
+													{% endfor %}
+												</select>
+											</div>
+										</div>
+									
+										<input type="number" class="form-control" id="cc" name="cc" placeholder="Cédula de ciudadanía o tarjeta de identidad" maxlength="20">
+										<input type="text" class="form-control" id="p_name" name="p_name" placeholder="Primer nombre">
+										<input type="text" class="form-control" id="s_name" name="s_name" placeholder="Segundo nombre">
+										<input type="text" class="form-control" id="p_lastname" name="p_lastname" placeholder="Primer apellido">
+										<input type="text" class="form-control" id="s_lastname" name="s_lastname" placeholder="Segundo apellido">
+										<input type="number" class="form-control" id="phone" name="phone" placeholder="Celular o teléfono">
+										<input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico">
+										
+										<br>
+										<button type="submit" onclick="modal_escrutinio()" class="btn btn-primary btn-lg" >
+											<i class="fa-solid fa-floppy-disk"> Guardar</i>
+										</button>										
 									</div>
 								</div>
-								<div class="row">
-									<div class="col">
-										<select class="form-control" name="coms" required id="coms">
-											<option>Seleccionar zona</option>
-											{% for z in zonas %}
-												<option value="{{z.zz}}">{{z.zz }} </option>
-											{% endfor %}
-										</select>
-									</div>
+							</div>
+
+							<div>									
+								<div class="responsive-iframe">
+									<iframe src="https://app.powerbi.com/view?r=eyJrIjoiNDBhODUxZTAtMTczZi00Yzk2LTkzYTYtYzM4OWI3ZjVkZmRjIiwidCI6IjQ5OGEwMmYzLTU3NzMtNDhhZS1hMDE4LWIxOTM3ZTkxNjRkMiJ9" width="100%"  height="500px" frameborder="0" loading="lazy" allowfullscreen></iframe>
 								</div>
-							
-								<input type="number" class="form-control" id="cc" name="cc" placeholder="Cédula de ciudadanía o tarjeta de identidad" maxlength="20">
-								<input type="text" class="form-control" id="p_name" name="p_name" placeholder="Primer nombre">
-								<input type="text" class="form-control" id="s_name" name="s_name" placeholder="Segundo nombre">
-								<input type="text" class="form-control" id="p_lastname" name="p_lastname" placeholder="Primer apellido">
-								<input type="text" class="form-control" id="s_lastname" name="s_lastname" placeholder="Segundo apellido">
-								<input type="number" class="form-control" id="phone" name="phone" placeholder="Celular o teléfono">
-								<input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico">
-								
-								<br>
-								<button type="submit" onclick="modal_escrutinio()" class="btn btn-primary" >
-									<i class="fa-solid fa-floppy-disk"></i>
-								</button>
+							</div>						
 							<br>
-							<!-- </form> -->
-
-
 							<br>
 							<table class="table tb_testigos" id="tb_testigos_esc">
 								<thead style="background: #0D9A49; color: #fff;">
@@ -354,7 +358,7 @@
 			<div class="t_testigos col-6" id="testigos">
 				<h4 id="init_title">TESTIGOS DE MESA</h4>
 				<div>					
-					<div id="btn-testigos">	
+					<div id="btn-testigos">
 						<div>
 							<br>
 							<button class="btn btn-success m-2"  onclick="init_testigos('predeterminado')">Agregar testigos de mesa</button>
@@ -388,66 +392,87 @@
 							
 					</div>
 					<div class="container-fluid home_electorales">
+						<button class="btn btn-success" onclick="home()"><i class="fa-solid fa-house"></i> Inicio</button>
+						<button class="btn btn-primary" onclick="returnLogin()">
+							<i class="fa-solid fa-user" ></i> Volver al login
+						</button>
+						<br>
 						<br>
 						<h3 class="tit_dep">{{departamento}} {{municipio}} {{candidato.id_com.name_com}}</h3>
-						<br>
-
-						<h5 id="init_2_title">LISTADO DE ZONAS DISPONIBLES PARA INSCRIBIR TESTIGOS DE MESA REMANENTE</h5>
-						<br>
-						<P>
-							Revise las mesas de votación que están disponibles a continuación, recuerde que si no aparece es porque ya hay un testigo inscrito en esa mesa. <b>TENGA EN CUENTA que el número de cédula de ciudadanía o tarjeta de identidad no debe tener puntos ni comas al igual que el número de teléfono. </b>
-							<br><br>
-							Teniendo esta claridad, diligencie los datos de los testigos de mesa. 
-							<br>
-							<b>Antes de dar clic en el botón azul verifique que los datos sean correctos, ya que después la mesa no estará <i>habilitada.</i></b>
-						</P>
-						<div>
-							{% if municipio != 'BOGOTA. D.C.' and municipio != 'BARRANQUILLA' and municipio != 'CARTAGENA' and municipio != 'SANTA MARTA' and municipio != 'BUENAVENTURA'   %}
-								<div class="row">
-									<div class="col">
-										<select class="form-control" name="zonas_testigo_mesa" required id="zonas_testigo_mesa">
-											<option>Seleccionar zona</option>
-											{% for z in zonas %}
-												<option value="{{z.zz}}">{{z.zz }} </option>
-											{% endfor %}
-										</select>
-									</div>
-								</div>								
-							{% endif %}
-								<div class="row">
-									<div class="col">
-										<select class="form-control" name="puestos_testigos_mesa" required id="puestos_testigos_mesa">
-											<option value=0>Seleccionar puesto</option>
-											{% for p in puestos %}
-												<option value="{{p.id}}">{{p.nombre_puesto}}</option>
-											{% endfor %}
-										</select>
-									</div>
-								</div>
-
-								<div class="row">
-									<div class="col">
-										<select class="form-select" name="mesa_testigos_mesa" required id="mesa_testigos_mesa" multiple="" tabindex="-1" aria-hidden="true">
-											{% for m in mesas %}
-												<option value="{{m.id}}">{{m.nombre_mesa}}</option>
-											{% endfor %}
-										</select>
-									</div>
-								</div>
+						<!-- <br>						 -->
+						<div class="d-inline-flex">
+							<div class="row">							
+								<div class="col-12 col-md-6 p-3">
+									<!-- <br> -->
+									<h5 id="init_2_title">LISTADO DE ZONAS DISPONIBLES PARA INSCRIBIR TESTIGOS DE MESA REMANENTE</h5>
+									<br>
+									<p>
+										Revise las mesas de votación que están disponibles a continuación, recuerde que si no aparece es porque ya hay un testigo inscrito en esa mesa. <b>TENGA EN CUENTA que el número de cédula de ciudadanía o tarjeta de identidad no debe tener puntos ni comas al igual que el número de teléfono. </b>
+										<br><br>
+										Teniendo esta claridad, diligencie los datos de los testigos de mesa.
+										<br>
+										<b>Antes de dar clic en el botón azul verifique que los datos sean correctos, ya que después la mesa no estará
+											<i>habilitada.</i>
+										</b>
+									</p>
+								</div>	
 								
-								<input type="number" class="form-control" id="cc_testigo_mesa" name="cc_testigo_mesa" placeholder="Cédula de ciudadanía o tarjeta de identidad" required>
-								<input type="text" class="form-control" id="p_name_testigo_mesa" name="p_name_testigo_mesa" placeholder="Primer nombre">
-								<input type="text" class="form-control" id="s_name_testigo_mesa" name="s_name_testigo_mesa" placeholder="Segundo nombre">
-								<input type="text" class="form-control" id="p_lastname_testigo_mesa" name="p_lastname_testigo_mesa" placeholder="Primer apellido">
-								<input type="text" class="form-control" id="s_lastname_testigo_mesa" name="s_lastname_testigo_mesa" placeholder="Segundo apellido">
-								<input type="number" class="form-control" id="phone_testigo_mesa" name="phone_testigo_mesa" placeholder="Celular o teléfono">
-								<input type="email" class="form-control" id="email_testigo_mesa" name="email_testigo_mesa" placeholder="Correo electrónico">
-								<br>
-								<button type="submit" onclick="modal_testigo_mesa()" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i>
-								</button>
-							
+								<div class="col-12 col-md-6 p-3">
+									{% if municipio != 'BOGOTA. D.C.' and municipio != 'BARRANQUILLA' and municipio != 'CARTAGENA' and municipio != 'SANTA MARTA' and municipio != 'BUENAVENTURA'   %}
+									<div class="row">
+										<div class="col">
+											<select class="form-control" name="zonas_testigo_mesa" required id="zonas_testigo_mesa">
+												<option>Seleccionar zona</option>
+												{% for z in zonas %}
+													<option value="{{z.zz}}">{{z.zz }} </option>
+												{% endfor %}
+											</select>
+										</div>
+									</div>								
+									{% endif %}
+									<div class="row">
+										<div class="col">
+											<select class="form-control" name="puestos_testigos_mesa" required id="puestos_testigos_mesa">
+												<option value=0>Seleccionar puesto</option>
+												{% for p in puestos %}
+													<option value="{{p.id}}">{{p.nombre_puesto}}</option>
+												{% endfor %}
+											</select>
+										</div>
+									</div>
 
+									<div class="row">
+										<div class="col">
+											<select class="form-select" name="mesa_testigos_mesa" required id="mesa_testigos_mesa" multiple="" tabindex="-1" aria-hidden="true">
+												{% for m in mesas %}
+													<option value="{{m.id}}">{{m.nombre_mesa}}</option>
+												{% endfor %}
+											</select>
+										</div>
+									</div>
+									
+									<input type="number" class="form-control" id="cc_testigo_mesa" name="cc_testigo_mesa" placeholder="Cédula de ciudadanía o tarjeta de identidad" required>
+									<input type="text" class="form-control" id="p_name_testigo_mesa" name="p_name_testigo_mesa" placeholder="Primer nombre">
+									<input type="text" class="form-control" id="s_name_testigo_mesa" name="s_name_testigo_mesa" placeholder="Segundo nombre">
+									<input type="text" class="form-control" id="p_lastname_testigo_mesa" name="p_lastname_testigo_mesa" placeholder="Primer apellido">
+									<input type="text" class="form-control" id="s_lastname_testigo_mesa" name="s_lastname_testigo_mesa" placeholder="Segundo apellido">
+									<input type="number" class="form-control" id="phone_testigo_mesa" name="phone_testigo_mesa" placeholder="Celular o teléfono">
+									<input type="email" class="form-control" id="email_testigo_mesa" name="email_testigo_mesa" placeholder="Correo electrónico">
+									<br>
+									<button type="submit" onclick="modal_testigo_mesa()" class="btn btn-primary btn-lg"><i class="fa-solid fa-floppy-disk"> Guardar</i>
+									</button>
+									
+									<br>
+								</div>
+							</div>
+						</div>
+						<div class="responsive-iframe">
+								<iframe
+									src="https://app.powerbi.com/view?r=eyJrIjoiNDBhODUxZTAtMTczZi00Yzk2LTkzYTYtYzM4OWI3ZjVkZmRjIiwidCI6IjQ5OGEwMmYzLTU3NzMtNDhhZS1hMDE4LWIxOTM3ZTkxNjRkMiJ9"
+									 frameborder="0" loading="lazy" allowfullscreen></iframe>
+						</div>
 
+						<div>
 							<br>
 							<br>
 							
@@ -923,7 +948,7 @@
 
 		$('#select_escrutinio').change(function () {
 			c = $(this);	
-			if(c.val() ==='ESCRUTINIO MUNICIPAL' ){				
+			if(c.val() === 'ESCRUTINIO MUNICIPAL'){				
 				$('#coms').hide()
 				$('#coms').empty()				
 			}else if (c.val() === 'ESCRUTINIO ZONAL / AUXILIAR' ) {
