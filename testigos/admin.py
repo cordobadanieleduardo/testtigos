@@ -26,7 +26,8 @@ class DivipoleAdmin(admin.ModelAdmin):
                      'total','mesas','cod_com','comuna_localidad','direccion',
                      'mesas_ocupadas',
                      )
+    search_fields = ('id','nombre_puesto')
 
 admin.site.register(Cands, CandsAdmin)
 admin.site.register(Zonas, ZonasAdmin)
-#admin.site.register(Divipole, DivipoleAdmin)    
+admin.site.register(Divipole, DivipoleAdmin)    
