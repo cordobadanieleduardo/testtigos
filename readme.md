@@ -18,3 +18,8 @@ cd testigos
 
 
   python manage.py runserver
+
+
+  git fetch --all
+
+  

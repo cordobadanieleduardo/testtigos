@@ -5,8 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.views import generic
 
 from django.contrib.auth import authenticate, login
-
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 
 
 # from django.contrib.auth.tokens import default_token_generator
@@ -444,12 +443,19 @@ def guardar_testico_mesa(request):
                 
                 if (type_witnesse !="escrutinio"):                       
                     lista = list(map(int, mesas.split(',')))  # [1, 2, 3]
-                    divi = Divipole.objects.filter(id=puesto).first()
-                    for l in lista:                        
-                        if not hasattr(divi, 'mesas_ocupadas') or divi.mesas_ocupadas is None:
-                            divi.mesas_ocupadas = []
-                        if l not in divi.mesas_ocupadas:
-                            divi.mesas_ocupadas.append(l) 
+                    
+                    try:                        
+                        divi = get_object_or_404(Divipole,pk=puesto)
+                        for l in lista:                        
+                            if not hasattr(divi, 'mesas_ocupadas') or divi.mesas_ocupadas is None:
+                                divi.mesas_ocupadas = []
+                            if l not in divi.mesas_ocupadas:
+                                divi.mesas_ocupadas.append(l) 
+                    except:
+                        error= "No encontró divipole"
+                        return JsonResponse({'data': data,'error': error}) 
+                        
+                  
                 
                 if (type_witnesse =="escrutinio"):
                     zona = escrutinio
