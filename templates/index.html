@@ -296,12 +296,19 @@
 												</select>
 											</div>
 										</div>
-									
-										<input type="number" class="form-control" id="cc" name="cc" placeholder="Cédula de ciudadanía o tarjeta de identidad" maxlength="20">
+										<select class="form-control" name="tipo_documento" required id="tipo_documento">
+											<option value="">Seleccionar tipo de documento</option>
+											<option value="CC">Cédula de ciudadanía</option>
+											<option value="TI">Tarjeta de identidad</option>
+											<option value="CI">Contraseña de identidad</option>
+										</select>
+										<input type="number" class="form-control" id="cc" name="cc" placeholder="Cédula de ciudadanía o tarjeta de identidad" maxlength="20" required>
 										<input type="text" class="form-control" id="p_name" name="p_name" placeholder="Primer nombre">
 										<input type="text" class="form-control" id="s_name" name="s_name" placeholder="Segundo nombre">
 										<input type="text" class="form-control" id="p_lastname" name="p_lastname" placeholder="Primer apellido">
 										<input type="text" class="form-control" id="s_lastname" name="s_lastname" placeholder="Segundo apellido">
+										<label for="fecha_expedicion" class="text-start d-block"> Fecha expedición</label>
+										<input type="date" class="form-control" id="fecha_expedicion" name="fecha_expedicion" placeholder="Fecha de expedición" required>
 										<input type="number" class="form-control" id="phone" name="phone" placeholder="Celular o teléfono">
 										<input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico">
 										
@@ -324,13 +331,17 @@
 								<thead style="background: #0D9A49; color: #fff;">
 									<th>Municipio</th>
 									<th>Zona</th>
+									<th>Tipo de documento</th>
 									<th>Cédula</th>
+									<th>Fecha de expedición</th>
 									<th>Testigo</th>
 									<th>Teléfono</th>
 									<th>Email</th>
 								</thead>
 								<tbody>
 									<tr>
+										<td>...</td>
+										<td>...</td>
 										<td>...</td>
 										<td>...</td>
 										<td>...</td>
@@ -450,14 +461,21 @@
 											</select>
 										</div>
 									</div>
-									
+									<select class="form-control" name="tipo_documento_testigo_mesa" required id="tipo_documento_testigo_mesa">
+										<option value="">Seleccionar tipo de documento</option>
+										<option value="CC">Cédula de ciudadanía</option>
+										<option value="TI">Tarjeta de identidad</option>
+										<option value="CI">Contraseña de identidad</option>
+									</select>
 									<input type="number" class="form-control" id="cc_testigo_mesa" name="cc_testigo_mesa" placeholder="Cédula de ciudadanía o tarjeta de identidad" required>
-									<input type="text" class="form-control" id="p_name_testigo_mesa" name="p_name_testigo_mesa" placeholder="Primer nombre">
+									<input type="text" class="form-control" id="p_name_testigo_mesa" name="p_name_testigo_mesa" placeholder="Primer nombre" required>
 									<input type="text" class="form-control" id="s_name_testigo_mesa" name="s_name_testigo_mesa" placeholder="Segundo nombre">
-									<input type="text" class="form-control" id="p_lastname_testigo_mesa" name="p_lastname_testigo_mesa" placeholder="Primer apellido">
+									<input type="text" class="form-control" id="p_lastname_testigo_mesa" name="p_lastname_testigo_mesa" placeholder="Primer apellido" required>
 									<input type="text" class="form-control" id="s_lastname_testigo_mesa" name="s_lastname_testigo_mesa" placeholder="Segundo apellido">
+									<label for="fecha_expedicion_testigo_mesa" class="text-start d-block"> Fecha expedición</label>
+									<input type="date" class="form-control" id="fecha_expedicion_testigo_mesa" name="fecha_expedicion_testigo_mesa" required>
 									<input type="number" class="form-control" id="phone_testigo_mesa" name="phone_testigo_mesa" placeholder="Celular o teléfono">
-									<input type="email" class="form-control" id="email_testigo_mesa" name="email_testigo_mesa" placeholder="Correo electrónico">
+									<input type="email" class="form-control" id="email_testigo_mesa" name="email_testigo_mesa" placeholder="Correo electrónico" required>
 									<br>
 									<button type="submit" onclick="modal_testigo_mesa()" class="btn btn-primary btn-lg"><i class="fa-solid fa-floppy-disk"> Guardar</i>
 									</button>
@@ -481,13 +499,17 @@
 									<th>Municipio</th>
 									<th>Puesto</th>
 									<th>Mesa</th>
+									<th>Tipo de documento</th>
 									<th>Cédula</th>
+									<th>Fecha de expedición</th>
 									<th>Testigo</th> 
 									<th>Teléfono</th>
 									<th>Email</th>
 								</thead>
 								<tbody>
 									<tr>
+										<td>...</td>
+										<td>...</td>
 										<td>...</td>
 										<td>...</td>
 										<td>...</td>
@@ -597,6 +619,8 @@
 		var puesto = [];
 		var mesa = [];
 		var zona = [];
+		var tipo_documento =""
+		var fecha_expedicion =""
 
 		var modal_id;
 		var modal_type;
@@ -708,17 +732,21 @@
 				puesto[id]=data[i].name_post;
 				mesa[id]=data[i].mesa;
 				zona[id]=data[i].name_table;
+				tipo_documento=data[i].tipo_documento;
 				cc=data[i].cc;
 				p_name=data[i].p_name;
 				s_name=data[i].s_name;
 				p_last_name=data[i].p_last_name;
 				s_last_name=data[i].s_last_name;
+				fecha_expedicion=data[i].fecha_expedicion;
 				email=data[i].email;
 				phone=data[i].phone;
 
 				if (cc==null) {cc="";}
+				if (tipo_documento==null) {tipo_documento="";}
 				if (s_name==null) {s_name="";}
 				if (s_last_name==null) {s_last_name="";}
+				if (fecha_expedicion==null) {fecha_expedicion="";}
 
 				p_name=p_name.toUpperCase()
 				s_name=s_name.toUpperCase()
@@ -750,7 +778,9 @@
 				// 	'<td><button type="submit" onclick="modal_testigo('+id+', 1)" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i></button></td>'+
 				// "</tr>";
 
-				table_tr += '<td>'+cc+'</td>'+
+				table_tr += '<td>'+tipo_documento+'</td>'+  
+				    '<td>'+cc+'</td>'+
+					'<td>'+fecha_expedicion+'</td>'+
 					'<td>'+p_name +' '+ s_name +' '+ p_last_name +' '+ s_last_name +'</td>'+
 					// '<td>"'+s_name+'"</td>'+
 					// '<td>"'+p_last_name+'"</td>'+
@@ -784,6 +814,8 @@
 			apellidos = $("#p_lastname").val() + " " + $("#s_lastname").val();
 			//puesto = $("#puestos_testigos_mesa option:selected").text();
 			//mesa=$("#mesa").val();
+			fecha_expedicion=$("#fecha_expedicion").val();
+			tipo_documento=$("#tipo_documento").val();
 			var z = $("#coms").val()
 
 			if( $('#select_escrutinio').val() === 'ESCRUTINIO MUNICIPAL' ){				
@@ -800,7 +832,9 @@
 			
 			resumen += "<li>Zona <i class='fa-solid fa-right-long'></i> "+escru_zona+"</li>";
 			
-			resumen += "<li>Cédula <i class='fa-solid fa-right-long'></i> "+$("#cc").val()+"</li>"+
+			resumen += "<li>Tipo de documento <i class='fa-solid fa-right-long'></i> "+ tipo_documento+"</li>"+
+					"<li>Cédula <i class='fa-solid fa-right-long'></i> "+$("#cc").val()+"</li>"+
+					"<li>Fecha de expedición <i class='fa-solid fa-right-long'></i> "+ fecha_expedicion+"</li>"+
 					"<li>Nombres <i class='fa-solid fa-right-long'></i> "+nombres+"</li>"+
 					"<li>Apellidos <i class='fa-solid fa-right-long'></i> "+apellidos+"</li>"+
 					"<li>Teléfono <i class='fa-solid fa-right-long'></i> "+$("#phone").val()+"</li>"+
@@ -824,8 +858,9 @@
 			apellidos = $("#p_lastname_testigo_mesa").val() + " " + $("#s_lastname_testigo_mesa").val();
 			puesto = $("#puestos_testigos_mesa option:selected").text();
 			mesa=$("#mesa_testigos_mesa").val();
-			//zona=$("#zona_testigos_mesa").val();
-
+			fecha_expedicion=$("#fecha_expedicion_testigo_mesa").val();
+			tipo_documento=$("#tipo_documento_testigo_mesa").val();
+			//zona=$("#zona_testigos_mesa").val();			
 			resumen = "<b style='color: #f00; text-aling: center;'>¿Está seguro que desea guardar los cambios de forma definitiva?</b><br><br> RECUERDE que una vez de clic en aceptar no se podrá modificar la información de este testigo:<br><br>"+
 				"<ul>"+
 					"<li>Departamento <i class='fa-solid fa-right-long'></i> "+'{{departamento}}'+"</li>"+
@@ -837,7 +872,9 @@
 			//else {
 			//	resumen += "<li>Zona <i class='fa-solid fa-right-long'></i> "+zona+"</li>";
 			//}
-			resumen += "<li>Cédula <i class='fa-solid fa-right-long'></i> "+$("#cc_testigo_mesa").val()+"</li>"+
+			resumen += "<li>Tipo de documento <i class='fa-solid fa-right-long'></i> "+ tipo_documento+"</li>"+
+					"<li>Cédula <i class='fa-solid fa-right-long'></i> "+$("#cc_testigo_mesa").val()+"</li>"+
+					"<li>Fecha de expedición <i class='fa-solid fa-right-long'></i> "+ fecha_expedicion+"</li>"+
 					"<li>Nombres <i class='fa-solid fa-right-long'></i> "+nombres+"</li>"+
 					"<li>Apellidos <i class='fa-solid fa-right-long'></i> "+apellidos+"</li>"+
 					"<li>Teléfono <i class='fa-solid fa-right-long'></i> "+$("#phone_testigo_mesa").val()+"</li>"+
@@ -873,6 +910,7 @@
 
 		function save_testigo(id, type) {
 			cedula = $("#cc" + id).val();
+			tipo_documento = $("#tipo_documento"+ id).val();
 			cc=""
 			for (i=0; i<cedula.length; i++) {
 				if (cedula[i]=="." || cedula[i]==",") {
@@ -884,6 +922,7 @@
 			s_name=$("#s_name" + id).val();
 			p_lastname=$("#p_lastname" + id).val();
 			s_lastname=$("#s_lastname" + id).val();
+			fecha_expedicion=$("#fecha_expedicion"+ id).val();			
 			phone=$("#phone" + id).val();
 			email=$("#email" + id).val();
 			let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -893,7 +932,7 @@
 			puesto=$("#puestos_testigos_mesa").val();
 
 
-			data = "id="+ puesto_nombre +"&cc="+cc+"&type="+type_testigos+"&p_name="+p_name+"&s_name="+s_name+"&p_lastname="+p_lastname+"&s_lastname="+s_lastname+"&phone="+phone+"&email="+email+"&save="+type+"&mesas="+mesas+"&zona="+zona+"&puesto="+puesto+"&escrutinio="+escru_zona+"&csrfmiddlewaretoken="+csrfToken;
+			data = "id="+ puesto_nombre +"&tipo_documento="+tipo_documento+"&cc="+cc+"&type="+type_testigos+"&p_name="+p_name+"&s_name="+s_name+"&p_lastname="+p_lastname+"&s_lastname="+s_lastname+"&fecha_expedicion="+fecha_expedicion+"&phone="+phone+"&email="+email+"&save="+type+"&mesas="+mesas+"&zona="+zona+"&puesto="+puesto+"&escrutinio="+escru_zona+"&csrfmiddlewaretoken="+csrfToken;
 			
 			val_email = false;
 			for (i=0; i < email.length; i++) {

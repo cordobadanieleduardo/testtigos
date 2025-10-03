@@ -139,6 +139,8 @@ class Zonas(models.Model):
     mesa = models.CharField(max_length=250, blank=True, null=True)
     zona = models.CharField(max_length=250, blank=True, null=True)
     
+    tipo_documento = models.CharField(max_length=25, blank=True, null=True)
+    nombre_tipo_documento = models.CharField(max_length=50, blank=True, null=True)
     cc = models.CharField(max_length=25, blank=True, null=True)
     p_name = models.CharField(max_length=25)
     s_name = models.CharField(max_length=25, blank=True, null=True)
@@ -146,6 +148,8 @@ class Zonas(models.Model):
     s_last_name = models.CharField(max_length=25, blank=True, null=True)
     email = models.CharField(max_length=150)
     phone = models.CharField(max_length=15)
+    fecha_expedicion = models.DateField(blank=True, null=True)
+    
     id_z_mun = models.ForeignKey(Muns, models.DO_NOTHING, db_column='id_z_mun')
     id_z_dept = models.ForeignKey(Dpts, models.DO_NOTHING, db_column='id_z_dept')
     id_z_com = models.ForeignKey(Coms, models.DO_NOTHING, db_column='id_z_com', blank=True, null=True)
@@ -168,6 +172,12 @@ class Zonas(models.Model):
     def save(self, *args, **kwargs):
         if not self.date_creacion:
             self.date_creacion = timezone.now().date()
+        if self.tipo_documento == 'CC':
+            self.nombre_tipo_documento = 'Cédula de ciudadanía'
+        elif self.tipo_documento == 'TI':
+            self.nombre_tipo_documento = 'Tarjeta de identidad'
+        elif self.tipo_documento == 'CI':
+            self.nombre_tipo_documento = 'Contraseña de identidad'
         super().save(*args, **kwargs)
 
     def __str__(self):

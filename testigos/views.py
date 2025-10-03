@@ -368,11 +368,13 @@ def data(request):
                                             'name_table',
                                             'mesa',
                                             'puesto'
+                                           , 'tipo_documento'
                                            , 'cc'
                                            , 'p_name'
                                            , 's_name'
                                            , 'p_last_name'
                                            , 's_last_name'
+                                           , 'fecha_expedicion'
                                            , 'email'
                                            , 'phone')), safe=False) 
 
@@ -381,12 +383,14 @@ def guardar_testico_mesa(request):
     if request.method == 'POST':
         
         id = request.POST.get('id')
+        tipo_documento = request.POST.get('tipo_documento')
         cc= request.POST.get('cc')
         type_witnesse=request.POST.get('type')
         p_name=request.POST.get('p_name')
         s_name=request.POST.get('s_name')
         p_lastname=request.POST.get('p_lastname')
         s_lastname=request.POST.get('s_lastname')
+        fecha_expedicion=request.POST.get('fecha_expedicion')
         phone=request.POST.get('phone')
         email=request.POST.get('email')        
         save=request.POST.get('save')
@@ -408,7 +412,7 @@ def guardar_testico_mesa(request):
             elif (mesas=="" and type_witnesse !="escrutinio"):
                 error = "Debe seleccionar al menos una mesa"
                 #data = []
-            elif (cc=="" or p_name=="" or p_lastname=="" or phone=="" or email==""):
+            elif (tipo_documento=="" or cc=="" or p_name=="" or p_lastname=="" or fecha_expedicion=="" or phone=="" or email==""):
                 error = "No se puede registrar este usuario, ya que los datos requeridos deben estar diligenciados"
                 #data = []
             else:
@@ -437,8 +441,8 @@ def guardar_testico_mesa(request):
                 divi = None
                 candidato:Cands = getCandidato(request)
                 lista = list()
-                if (type_witnesse !="escrutinio"):
-                       
+                
+                if (type_witnesse !="escrutinio"):                       
                     lista = list(map(int, mesas.split(',')))  # [1, 2, 3]
                     divi = Divipole.objects.filter(id=puesto).first()
                     for l in lista:                        
@@ -446,8 +450,6 @@ def guardar_testico_mesa(request):
                             divi.mesas_ocupadas = []
                         if l not in divi.mesas_ocupadas:
                             divi.mesas_ocupadas.append(l) 
-                    if divi:                   
-                        divi.save()
                 
                 if (type_witnesse =="escrutinio"):
                     zona = escrutinio
@@ -456,11 +458,13 @@ def guardar_testico_mesa(request):
                 t_zonas =Zonas.objects.create(
                     name_table= id,
                     type_witnesse= type_witnesse,
+                    tipo_documento= tipo_documento,
                     cc= cc,
                     p_name=p_name, 
                     s_name= s_name,
                     p_last_name=p_lastname, 
                     s_last_name= s_lastname,
+                    fecha_expedicion= fecha_expedicion,
                     email= email,
                     phone= phone,
                     id_z_mun= candidato.id_mun, 
@@ -477,6 +481,10 @@ def guardar_testico_mesa(request):
                     zona=zona
                     # desc_error =
                 )
+                
+             
+                if divi:                   
+                    divi.save()
                 
                 error="ok"
                 
