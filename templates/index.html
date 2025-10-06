@@ -307,7 +307,7 @@
 										<input type="text" class="form-control" id="s_name" name="s_name" placeholder="Segundo nombre">
 										<input type="text" class="form-control" id="p_lastname" name="p_lastname" placeholder="Primer apellido">
 										<input type="text" class="form-control" id="s_lastname" name="s_lastname" placeholder="Segundo apellido">
-										<label for="fecha_expedicion" class="text-start d-block"> Fecha expedición</label>
+										<label for="fecha_expedicion" id="fecha_expedicion_label"  class="text-start d-block">Fecha expedición:</label>
 										<input type="date" class="form-control" id="fecha_expedicion" name="fecha_expedicion" placeholder="Fecha de expedición" required>
 										<input type="number" class="form-control" id="phone" name="phone" placeholder="Celular o teléfono">
 										<input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico">
@@ -472,7 +472,7 @@
 									<input type="text" class="form-control" id="s_name_testigo_mesa" name="s_name_testigo_mesa" placeholder="Segundo nombre">
 									<input type="text" class="form-control" id="p_lastname_testigo_mesa" name="p_lastname_testigo_mesa" placeholder="Primer apellido" required>
 									<input type="text" class="form-control" id="s_lastname_testigo_mesa" name="s_lastname_testigo_mesa" placeholder="Segundo apellido">
-									<label for="fecha_expedicion_testigo_mesa" class="text-start d-block"> Fecha expedición</label>
+									<label for="fecha_expedicion_testigo_mesa" class="text-start d-block" id="fecha_expedicion_testigo_mesa_label">Fecha expedición:</label>
 									<input type="date" class="form-control" id="fecha_expedicion_testigo_mesa" name="fecha_expedicion_testigo_mesa" required>
 									<input type="number" class="form-control" id="phone_testigo_mesa" name="phone_testigo_mesa" placeholder="Celular o teléfono">
 									<input type="email" class="form-control" id="email_testigo_mesa" name="email_testigo_mesa" placeholder="Correo electrónico" required>
@@ -1060,6 +1060,27 @@
 				}
 			});
 		});
+
+		$('#tipo_documento_testigo_mesa').change(function () {
+			c = $(this);
+			if(c.val() === 'CI' || c.val() === 'TI'){	
+				$("#fecha_expedicion_testigo_mesa_label").text("Fecha de nacimiento:");
+			}else{
+				$("#fecha_expedicion_testigo_mesa_label").text("Fecha expedición:");
+			}		
+		});
+
+		
+		$('#tipo_documento').change(function () {
+			c = $(this);
+			if(c.val() === 'CI' || c.val() === 'TI'){	
+				$("#fecha_expedicion_label").text("Fecha de nacimiento:");
+			}else{
+				$("#fecha_expedicion_label").text("Fecha expedición:");
+			}		
+		});
+
+
 	</script>
 	<script>
 		// Call the dataTables jQuery plugin
