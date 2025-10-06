@@ -307,13 +307,20 @@ class Testigos(LoginRequiredMixin, generic.TemplateView):
         #print('zonassssss',zonas)
         #print(zonas.count())
         context["zonas"] = zonas
+        
+        if (divi_dept  and divi_mun and divi_coms ):   
+            puestos= Divipole.objects.filter(dd=divi_dept,mm=divi_mun,comuna_localidad=candidato.id_com.name_com ) \
+            .values('id','nombre_puesto') \
+            .annotate(total_votantes=Count('total')) \
+            .order_by('nombre_puesto')
+            context["puestos"] = puestos    
                 
-        # if (divi_dept and divi_mun ):   
-        #     puestos= Divipole.objects.filter(dd=divi_dept,mm=divi_mun) \
-        #     .values('id','nombre_puesto') \
-        #     .annotate(total_votantes=Count('total')) \
-        #     .order_by('nombre_puesto')
-        #context["puestos"] = puestos    
+        elif (divi_dept and divi_mun ):   
+            puestos= Divipole.objects.filter(dd=divi_dept,mm=divi_mun) \
+            .values('id','nombre_puesto') \
+            .annotate(total_votantes=Count('total')) \
+            .order_by('nombre_puesto')
+            context["puestos"] = puestos    
         
         # if (divi_dept and divi_mun and divi_coms ):   
         #     mesas= Divipole.objects.filter(dd=divi_dept,mm=divi_mun,pp= divi_coms )\
